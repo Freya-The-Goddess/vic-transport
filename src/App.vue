@@ -37,6 +37,10 @@ export default {
     }
   },
 
+  beforeCreate: function () {
+    this.$store.commit('initStore')
+  },
+
   methods: {
     // Run GET request to PHP script to get full API request URL with hash signature, returns promise of URL valu
     getSignedRequestUrl: function (requestString) {
