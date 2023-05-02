@@ -76,7 +76,7 @@ export default {
 
     // Trim chip list to max length
     trimmedChipList: function () {
-      if (this.maxChips > 0 || this.chipList.length > this.maxChips) {
+      if (this.maxChips > 0 && this.chipList.length > this.maxChips) {
         return this.chipList.slice(0, this.maxChips - 1)
       } else return this.chipList
     },

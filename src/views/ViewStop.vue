@@ -61,10 +61,9 @@
             :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
             @click='disruptionsExpanded = !disruptionsExpanded'
             role='button'
-            class='float-right pa-1'
-            style='max-width: 10%'
+            class='card-expand-button float-right pa-1'
           ></v-icon>
-          <div class='' style='max-width: 90%'>
+          <div class='card-content'>
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-alert-circle'
@@ -86,13 +85,13 @@
       <v-col>
         <v-card class='pa-3'>
           <v-icon
+            v-if='stopData.routes.length > maxChips'
             :icon='routesExpanded ? "mdi-menu-up" : "mdi-menu-down"'
             @click='routesExpanded = !routesExpanded'
             role='button'
-            class='float-right pa-1'
-            style='max-width: 10%'
+            class='card-expand-button float-right pa-1'
           ></v-icon>
-          <div class='' style='max-width: 90%'>
+          <div class='card-content'>
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-routes'
@@ -103,7 +102,7 @@
             <route-chips
               :routes-list='stopData.routes'
               :route-type='stopData.route_type'
-              :max-chips='routesExpanded ? 0 : 8'
+              :max-chips='routesExpanded ? 0 : maxChips'
               :truncate-chips='!routesExpanded'
               :chip-links='true'
               :expandable='true'
@@ -135,6 +134,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { useDisplay } from 'vuetify'
 
 // Child components
 import RouteChips from '../components/SectionRouteChips.vue'
@@ -144,6 +144,11 @@ export default defineComponent({
 
   components: { // Child components
     RouteChips
+  },
+
+  setup () {
+    const { xs, sm, md, lgAndUp } = useDisplay()
+    return { xs, sm, md, lgAndUp }
   },
 
   data: function () { // Default data
@@ -164,6 +169,23 @@ export default defineComponent({
       return !!favourites.find(function (fav) {
         return (fav.stopId.toString() === self.$route.params.stopId && fav.routeType.toString() === self.$route.params.routeType)
       })
+    },
+
+    // Maximum number of chips to show for each breakpoint when not expanded
+    maxChips: function () {
+      if (this.xs) {
+        if (this.stopData.route_type === 1 || this.stopData.route_type === 2) return 5
+        else return 6
+      } else if (this.sm) {
+        if (this.stopData.route_type === 1 || this.stopData.route_type === 2) return 8
+        else return 9
+      } else if (this.md) {
+        if (this.stopData.route_type === 1 || this.stopData.route_type === 2) return 10
+        else return 12
+      } else if (this.lgAndUp) {
+        if (this.stopData.route_type === 1 || this.stopData.route_type === 2) return 14
+        else return 15
+      } else return 0
     }
   },
 
@@ -178,6 +200,9 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.stopData = data.stop
+          if (this.stopData.routes.length < this.maxChips) {
+            this.routesExpanded = true
+          }
           this.disruptionData = data.disruptions
           this.disruptions = Object.keys(this.disruptionData).length
         })
@@ -200,5 +225,13 @@ export default defineComponent({
 <style>
 .v-tooltip .v-overlay__content {
   background: rgba(var(--v-theme-surface-variant), 1) !important;
+}
+
+.card-content {
+  max-width: 90%;
+}
+
+.card-expand-button {
+  max-width: 10%;
 }
 </style>

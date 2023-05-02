@@ -53,7 +53,7 @@
           <route-chips
             :routes-list='stop.routes'
             :route-type='stop.route_type'
-            :max-chips='4'
+            :max-chips='maxChips'
             :truncate-chips='true'
             :chip-links='false'
             :expandable='false'
@@ -82,9 +82,8 @@ export default {
   ],
 
   setup () {
-    // Destructure only the keys we want to use
-    const { xs } = useDisplay()
-    return { xs }
+    const { xs, sm, md, lgAndUp } = useDisplay()
+    return { xs, sm, md, lgAndUp }
   },
 
   data: function () {
@@ -102,6 +101,27 @@ export default {
       return !!favourites.find(function (fav) {
         return (fav.stopId === self.stop.stop_id && fav.routeType === self.stop.route_type)
       })
+    },
+
+    // Maximum number of chips to show for each breakpoint when not expanded
+    maxChips: function () {
+      if (this.xs || this.md) {
+        switch (this.stop.route_type) {
+          case 0: return 3
+          case 1: return 5
+          case 2: return 4
+          case 3: return 2
+          default: return 3
+        }
+      } else if (this.sm || this.lgAndUp) {
+        switch (this.stop.route_type) {
+          case 0: return 4
+          case 1: return 8
+          case 2: return 6
+          case 3: return 3
+          default: return 4
+        }
+      } else return 0
     }
   },
 
