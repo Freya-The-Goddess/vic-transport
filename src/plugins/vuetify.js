@@ -31,7 +31,7 @@ export default createVuetify({
           'network-grey': '#333434',
           'over-color': '#FFFFFF',
           'error-text': '#FF6666',
-          'favourite-yellow': '#FFFF55',
+          'favourite-yellow': '#FFFF33',
           'disruption-orange': '#FF621A',
           'metro-blue': '#005194',
           'tram-green': '#4F7E15',

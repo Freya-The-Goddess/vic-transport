@@ -18,13 +18,13 @@
     <v-row>
       <v-col>
         <v-icon
-          icon='mdi-star-outline'
-          role='button'
+          @click='favouriteButton()'
+          :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
           size='xx-large'
-          class='text-favourite-yellow float-right pa-1'
-          style='max-width: 10%'
+          class='text-favourite-yellow float-right'
+          style='max-width: 20%;'
         ></v-icon>
-        <div class='d-flex align-center float-left fill-height' style='max-width: 90%;'>
+        <div class='d-flex align-center float-left fill-height' style='max-width: 80%;'>
           <v-card
             :color='$root.routeTypes[stopData.route_type].route_type_color'
             rounded='circle'
@@ -144,6 +144,17 @@ export default defineComponent({
     }
   },
 
+  computed: {
+    // Returns true if stop is in favourites
+    favouriteStop: function () {
+      const self = this
+      const favourites = this.$store.state.favouriteStops
+      return !!favourites.find(function (fav) {
+        return (fav.stopId.toString() === self.$route.params.stopId && fav.routeType.toString() === self.$route.params.routeType)
+      })
+    }
+  },
+
   mounted: function () {
     this.getStopData(this.$route.params.stopId, this.$route.params.routeType)
   },
@@ -161,6 +172,14 @@ export default defineComponent({
         .catch((error) => {
           console.log(error)
         })
+    },
+
+    favouriteButton: function () {
+      if (!this.favouriteStop) {
+        this.$store.commit('addFavouriteStop', { stopId: this.stopData.stop_id, routeType: this.stopData.route_type })
+      } else {
+        this.$store.commit('removeFavouriteStop', { stopId: this.stopData.stop_id, routeType: this.stopData.route_type })
+      }
     }
   }
 })

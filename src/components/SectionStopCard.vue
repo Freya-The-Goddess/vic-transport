@@ -1,13 +1,16 @@
 <template>
-  <router-link
-    :to='"/stop/" + stop.stop_id + "/route_type/" + stop.route_type'
-    class='text-decoration-none'
+  <v-card
+    class='fill-height pa-3'
   >
-    <v-card
-      role='button'
-      class='fill-height pa-3'
+    <router-link
+      :to='"/stop/" + stop.stop_id + "/route_type/" + stop.route_type'
+      class='text-decoration-none text-over-color'
     >
-      <div class='d-flex align-center float-left fill-height' style='max-width: 90%;'>
+      <div
+        role='button'
+        class='d-flex align-center float-left fill-height'
+        :style='xs ? "width: 88%" : "width: 92%"'
+      >
         <v-card
           :color='$root.routeTypes[stop.route_type].route_type_color'
           rounded='circle'
@@ -32,22 +35,28 @@
           ></route-chips>
         </div>
       </div>
-      <div class='float-right' style='max-width: 10%'>
-        <v-icon
-          icon='mdi-star-outline'
-          class='text-favourite-yellow'
-        ></v-icon><br>
-        <v-icon
-          v-if='disruption'
-          icon='mdi-alert-circle'
-          class="text-disruption-orange mt-4"
-        ></v-icon>
-      </div>
-    </v-card>
-  </router-link>
+    </router-link>
+    <div
+      class='float-right'
+      :style='xs ? "max-width: 12%" : "max-width: 8%"'
+    >
+      <v-icon
+        @click='favouriteButton()'
+        :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
+        class='text-favourite-yellow'
+      ></v-icon><br>
+      <v-icon
+        v-if='disruption'
+        icon='mdi-alert-circle'
+        class="text-disruption-orange mt-4"
+      ></v-icon>
+    </div>
+  </v-card>
 </template>
 
 <script>
+import { useDisplay } from 'vuetify'
+
 // Child components
 import RouteChips from '../components/SectionRouteChips.vue'
 
@@ -62,10 +71,27 @@ export default {
     'stop'
   ],
 
+  setup () {
+    // Destructure only the keys we want to use
+    const { xs } = useDisplay()
+    return { xs }
+  },
+
   data: function () {
     return {
       disruption: false,
       jsonDisruptions: ''
+    }
+  },
+
+  computed: {
+    // Returns true if stop is in favourites
+    favouriteStop: function () {
+      const self = this
+      const favourites = this.$store.state.favouriteStops
+      return !!favourites.find(function (fav) {
+        return (fav.stopId === self.stop.stop_id && fav.routeType === self.stop.route_type)
+      })
     }
   },
 
@@ -89,6 +115,14 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+
+    favouriteButton: function () {
+      if (!this.favouriteStop) {
+        this.$store.commit('addFavouriteStop', { stopId: this.stop.stop_id, routeType: this.stop.route_type })
+      } else {
+        this.$store.commit('removeFavouriteStop', { stopId: this.stop.stop_id, routeType: this.stop.route_type })
+      }
     }
   }
 }
