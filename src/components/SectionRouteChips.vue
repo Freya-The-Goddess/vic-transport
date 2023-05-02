@@ -3,12 +3,21 @@
     <v-chip
       v-for='(route, index) in trimmedChipList'
       :key='index'
-      class='text-caption'
-    >{{ route }}</v-chip>
+      variant='outlined'
+      :disabled='!chipLinks'
+      style='opacity: 1'
+      :class='"text-" + $root.routeTypes[route.route_type].route_type_color'
+    >
+      <span class='text-caption text-over-color'>{{ route.short_name }}</span>
+    </v-chip>
     <v-chip
       v-if='extraChips'
-      class='text-caption font-italic'
-    >+{{ extraChips }} MORE...</v-chip>
+      @click='expand'
+      variant='outlined'
+      :disabled='!expandable'
+      style='opacity: 1'
+      class='text-caption'
+    >+{{ extraChips }} more...</v-chip>
   </v-chip-group>
 </template>
 
@@ -21,16 +30,11 @@ export default {
     'routeType',
     'maxChips',
     'truncateChips',
-    'chipLinks'
+    'chipLinks',
+    'expandable'
   ],
 
-  data: function () { // Default data
-    return {
-      extraChips: 0
-    }
-  },
-
-  computed: {
+  computed: { // Computed values
     // Sort routes list
     sortedRoutesList: function () {
       const self = this
@@ -59,12 +63,12 @@ export default {
       const self = this
       return this.sortedRoutesList.map(function (route) {
         if ((route.route_type === 1 || route.route_type === 2) && route.route_number !== '') {
-          return route.route_number
+          return { short_name: route.route_number.toString(), route_type: route.route_type }
         } else {
           if (route.route_name.length <= 15 || !self.truncateChips) {
-            return route.route_name
+            return { short_name: route.route_name, route_type: route.route_type }
           } else {
-            return route.route_name.substr(0, 12) + '...'
+            return { short_name: route.route_name.substr(0, 12) + '...', route_type: route.route_type }
           }
         }
       })
@@ -72,13 +76,22 @@ export default {
 
     // Trim chip list to max length
     trimmedChipList: function () {
-      if (this.maxChips > 0) {
-        if (this.chipList.length > this.maxChips) {
-          // eslint-disable-next-line
-          this.extraChips = this.chipList.length - (this.maxChips - 1)
-          return this.chipList.slice(0, this.maxChips - 1)
-        } else return this.chipList
+      if (this.maxChips > 0 || this.chipList.length > this.maxChips) {
+        return this.chipList.slice(0, this.maxChips - 1)
       } else return this.chipList
+    },
+
+    // Number of hidden chips on trimmed chip list
+    extraChips: function () {
+      if (this.maxChips > 0 && this.chipList.length > this.maxChips) {
+        return this.chipList.length - (this.maxChips - 1)
+      } else return 0
+    }
+  },
+
+  methods: {
+    expand: function () {
+      if (this.expandable) this.$emit('expand')
     }
   }
 }

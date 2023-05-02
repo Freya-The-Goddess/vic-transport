@@ -93,9 +93,11 @@
             <route-chips
               :routes-list='stopData.routes'
               :route-type='stopData.route_type'
-              :max-chips='routesExpanded ? 0 : 10'
-              :truncate-chips='false'
+              :max-chips='routesExpanded ? 0 : 8'
+              :truncate-chips='!routesExpanded'
               :chip-links='true'
+              :expandable='true'
+              @expand='routesExpanded = true'
               class='mt-2'
             ></route-chips>
           </div>

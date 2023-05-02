@@ -30,8 +30,8 @@
             :route-type='stop.route_type'
             :max-chips='4'
             :truncate-chips='true'
-            :expandable='false'
             :chip-links='false'
+            :expandable='false'
           ></route-chips>
         </div>
       </div>
