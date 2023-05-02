@@ -2,6 +2,32 @@
   <v-card
     class='fill-height pa-3'
   >
+    <div
+      class='float-right'
+      :style='xs ? "max-width: 12%" : "max-width: 8%"'
+    >
+      <v-tooltip
+        :text='favouriteStop ? "Remove Favourite" : "Add Favourite"'
+        location='start'
+        open-delay='1200'
+        content-class='text-caption pt-1 pb-1 ps-2 pe-2'
+      >
+        <template v-slot:activator="{ props }">
+          <v-icon
+            v-bind='props'
+            @click='favouriteButton()'
+            :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
+            class='text-favourite-yellow'
+          ></v-icon>
+        </template>
+      </v-tooltip>
+      <br>
+      <v-icon
+        v-if='disruption'
+        icon='mdi-alert-circle'
+        class="text-disruption-orange mt-4"
+      ></v-icon>
+    </div>
     <router-link
       :to='"/stop/" + stop.stop_id + "/route_type/" + stop.route_type'
       class='text-decoration-none text-over-color'
@@ -14,13 +40,12 @@
         <v-card
           :color='$root.routeTypes[stop.route_type].route_type_color'
           rounded='circle'
-          style='width: 50px; height: 50px; flex: 0 0 50px'
-          class='text-over-color float-left me-3'
+          class='route-type-card text-over-color float-left me-3'
         >
           <v-icon
             :icon='$root.routeTypes[stop.route_type].route_type_icon'
             size='x-large'
-            style='width: 50px; height: 50px;'
+            class='route-type-icon'
           ></v-icon>
         </v-card>
         <div class='align-top fill-height'>
@@ -36,21 +61,6 @@
         </div>
       </div>
     </router-link>
-    <div
-      class='float-right'
-      :style='xs ? "max-width: 12%" : "max-width: 8%"'
-    >
-      <v-icon
-        @click='favouriteButton()'
-        :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
-        class='text-favourite-yellow'
-      ></v-icon><br>
-      <v-icon
-        v-if='disruption'
-        icon='mdi-alert-circle'
-        class="text-disruption-orange mt-4"
-      ></v-icon>
-    </div>
   </v-card>
 </template>
 
@@ -127,3 +137,20 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-tooltip .v-overlay__content {
+  background: rgba(var(--v-theme-surface-variant), 1) !important;
+}
+
+.route-type-card {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+}
+
+.route-type-icon {
+  width: 50px;
+  height: 50px;
+}
+</style>

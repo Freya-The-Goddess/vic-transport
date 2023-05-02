@@ -17,13 +17,23 @@
   <v-container v-else>
     <v-row>
       <v-col>
-        <v-icon
-          @click='favouriteButton()'
-          :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
-          size='xx-large'
-          class='text-favourite-yellow float-right'
-          style='max-width: 20%;'
-        ></v-icon>
+        <v-tooltip
+          :text='favouriteStop ? "Remove Favourite" : "Add Favourite"'
+          location='start'
+          open-delay='1200'
+          content-class='pt-2 pb-2 ps-3 pe-3'
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind='props'
+              @click='favouriteButton()'
+              :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
+              size='xx-large'
+              class='text-favourite-yellow float-right'
+              style='max-width: 20%;'
+            ></v-icon>
+          </template>
+        </v-tooltip>
         <div class='d-flex align-center float-left fill-height' style='max-width: 80%;'>
           <v-card
             :color='$root.routeTypes[stopData.route_type].route_type_color'
@@ -186,3 +196,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+.v-tooltip .v-overlay__content {
+  background: rgba(var(--v-theme-surface-variant), 1) !important;
+}
+</style>
