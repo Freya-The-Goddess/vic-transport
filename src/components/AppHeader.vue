@@ -3,7 +3,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <h1>PTV Departures</h1>
+          <h1 class='text-h4 font-weight-bold'>Vic Transport</h1>
         </v-col>
       </v-row>
     </v-container>
