@@ -16,7 +16,10 @@
         ></v-icon>
       </template>
       <v-list-item-title class='text-wrap'>{{ disruption.title }}</v-list-item-title>
-      <v-list-item-subtitle>{{ disruption.description }}</v-list-item-subtitle>
+      <v-list-item-subtitle>
+        {{ disruption.description }}
+        <a :href='disruption.url' target='_blank'>more info</a>
+      </v-list-item-subtitle>
     </v-list-item>
   </v-list>
 </template>
