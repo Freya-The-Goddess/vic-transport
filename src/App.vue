@@ -38,7 +38,7 @@ export default {
   },
 
   beforeCreate: function () {
-    this.$store.commit('initStore')
+    this.$store.commit('initStore') // initialise vuex store
   },
 
   methods: {
