@@ -10,7 +10,7 @@
           >
             <v-btn
               @click="navigate"
-              class="rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
+              class="text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
             >
               <div class="d-flex flex-column flex-md-row align-center">
                 <div class="mb-1 mb-md-0 me-md-2">
@@ -31,7 +31,7 @@
           >
             <v-btn
               @click="navigate"
-              class="rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
+              class="text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
             >
               <div class="d-flex flex-column flex-md-row align-center">
                 <div class="mb-1 mb-md-0 me-md-2">
@@ -51,7 +51,7 @@
           >
             <v-btn
               @click="navigate"
-              class="rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
+              class="text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
             >
               <div class="d-flex flex-column flex-md-row align-center">
                 <div class="mb-1 mb-md-0 me-md-2">
@@ -71,7 +71,7 @@
           >
             <v-btn
               @click="navigate"
-              class="rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
+              class="text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1"
             >
               <div class="d-flex flex-column flex-md-row align-center">
                 <div class="mb-1 mb-md-0 me-md-2">
