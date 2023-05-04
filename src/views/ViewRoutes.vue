@@ -6,7 +6,7 @@
       </v-col>
     </v-row>
     <route-type-select
-      multiple='false'
+      :multiple='false'
       select-route-types='0'
       @selected-route-types='getRouteTypes'
     ></route-type-select>

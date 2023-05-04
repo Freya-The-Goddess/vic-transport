@@ -67,7 +67,7 @@ export default {
   methods: {
     // Route button clicked, select/unselect if multiple or replace if not multiple
     selectRouteType: function (routeType) {
-      if (this.multiple === 'true') { // Multiple selections allowed
+      if (this.multiple) { // Multiple selections allowed
         if ($.inArray(routeType, this.routeTypes) !== -1) {
           this.routeTypes = this.routeTypes.filter(function (type) { return type !== routeType })
         } else {

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <h2>Search</h2>
+        <h2>Search Stops</h2>
       </v-col>
     </v-row>
     <v-row>
@@ -19,7 +19,7 @@
       </v-col>
     </v-row>
     <route-type-select
-      multiple='true'
+      :multiple='true'
       :select-route-types='$route.params.routeTypes'
       @selected-route-types='getRouteTypes'
     ></route-type-select>
