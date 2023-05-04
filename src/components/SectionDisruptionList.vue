@@ -1,12 +1,10 @@
 <template>
-  <v-list
-    class='mt-2'
-  >
+  <v-list>
     <v-list-item
       v-for='disruption in disruptionList'
       :key='disruption.disruption_id'
       lines='5'
-      class='mb-4'
+      class='mt-2 mb-2'
     >
       <template v-slot:prepend>
         <v-icon
