@@ -2,23 +2,22 @@
   <v-row id='pagination'>
     <v-col>
       <!-- Items per page select input -->
-      <div class='d-inline-block me-3'>
+      <div class='d-inline-block me-2'>
         <v-select
           v-model='itemsPerPage'
           :items='[5, 10, 20, 50]'
           label='Per Page'
           :hide-details='true'
           variant='solo'
-          style='width: 100px'
-          class='float-left'
+          class='per-page-select float-left'
         ></v-select>
       </div>
       <!-- Pagination controls -->
-      <div class='d-inline-block ms-3'>
+      <div class='d-inline-block ms-2'>
         <v-pagination
           v-model='currentPage'
           :length='totalPages'
-          total-visible='4'
+          :total-visible='smAndDown ? 1 : 4'
           rounded='circle'
           class='float-left'
         ></v-pagination>
@@ -28,12 +27,19 @@
 </template>
 
 <script>
+import { useDisplay } from 'vuetify'
+
 export default {
   name: 'PaginationButtons',
 
   props: [ // Component properties
     'totalItems'
   ],
+
+  setup () {
+    const { smAndDown } = useDisplay()
+    return { smAndDown }
+  },
 
   data: function () { // Default data
     return {
@@ -74,3 +80,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.per-page-select {
+  width: 100px;
+}
+</style>
