@@ -70,11 +70,13 @@
               <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>Disruptions ({{ currentDisruptions.length }})</h3>
             </div>
           </div>
-          <disruption-list
-            v-if='disruptionsExpanded'
-            :disruptionList='currentDisruptions'
-            class='w-100'
-          ></disruption-list>
+          <v-expand-transition>
+            <disruption-list
+              v-if='disruptionsExpanded'
+              :disruptionList='currentDisruptions'
+              class='w-100'
+            ></disruption-list>
+          </v-expand-transition>
         </v-card>
       </v-col>
     </v-row>
