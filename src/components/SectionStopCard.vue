@@ -132,14 +132,17 @@ export default {
   methods: {
     // Query API for disruptions at stop
     getDisruptions: function () {
+      const self = this
       const request = `/v3/disruptions/stop/${this.stop.stop_id}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
-          Object.keys(data.disruptions).forEach(disruptionType => {
-            if (data.disruptions[disruptionType].length) {
-              this.disruption = true
-              return null // Exit loop
-            }
+          Object.values(data.disruptions).forEach(function (disType) {
+            disType.forEach(function (dis) {
+              if (dis.disruption_status === 'Current') {
+                self.disruption = true
+                return null // Exit loop
+              }
+            })
           })
         })
         .catch((error) => {

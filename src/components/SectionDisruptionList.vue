@@ -1,0 +1,50 @@
+<template>
+  <v-list
+    class='mt-2'
+  >
+    <v-list-item
+      v-for='disruption in disruptionList'
+      :key='disruption.disruption_id'
+      lines='5'
+      class='mb-4'
+    >
+      <template v-slot:prepend>
+        <v-icon
+          :icon='disruptionIcon(disruption).icon'
+          :class='"text-"+disruptionIcon(disruption).color'
+          class='me-5 disruption-icon'
+        ></v-icon>
+      </template>
+      <v-list-item-title class='text-wrap'>{{ disruption.title }}</v-list-item-title>
+      <v-list-item-subtitle>{{ disruption.description }}</v-list-item-subtitle>
+    </v-list-item>
+  </v-list>
+</template>
+
+<script>
+export default {
+  name: 'DisruptionList',
+
+  props: [ // Component properties
+    'disruptionList'
+  ],
+
+  methods: {
+    disruptionIcon: function (disruption) {
+      if (disruption.disruption_type === 'Planned Works') {
+        return { icon: 'mdi-alert', color: 'works-yellow' }
+      } else if (disruption.disruption_type === 'Planned Closure') {
+        return { icon: 'mdi-alert-box', color: 'closure-grey' }
+      } else {
+        return { icon: 'mdi-alert-circle', color: 'disruption-orange' }
+      }
+    }
+  }
+}
+</script>
+
+<style>
+.disruption-icon {
+  opacity: 1 !important;
+}
+</style>

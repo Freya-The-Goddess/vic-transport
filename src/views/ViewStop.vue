@@ -29,22 +29,20 @@
               @click='favouriteButton()'
               :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
               size='xx-large'
-              class='text-favourite-yellow float-right'
-              style='max-width: 20%;'
+              class='fav-button text-favourite-yellow float-right'
             ></v-icon>
           </template>
         </v-tooltip>
-        <div class='d-flex align-center float-left fill-height' style='max-width: 80%;'>
+        <div class='stop-heading d-flex align-center float-left fill-height'>
           <v-card
             :color='$root.routeTypes[stopData.route_type].route_type_color'
             rounded='circle'
-            style='width: 70px; height: 70px; flex: 0 0 70px'
-            class='text-over-color float-left me-5'
+            class='stop-heading-card text-over-color float-left me-5'
           >
             <v-icon
               :icon='$root.routeTypes[stopData.route_type].route_type_icon'
               size='xxx-large'
-              style='width: 70px; height: 70px;'
+              class='stop-heading-icon'
             ></v-icon>
           </v-card>
           <div class='float-left fill-height align-center'>
@@ -54,7 +52,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-if='disruptions'>
+    <v-row v-if='currentDisruptions.length'>
       <v-col>
         <v-card class='pa-3'>
           <v-icon
@@ -63,21 +61,20 @@
             role='button'
             class='card-expand-button float-right pa-1'
           ></v-icon>
-          <div class='card-content'>
+          <div class='card-title'>
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-alert-circle'
                 class='d-inline-block fill-height text-disruption-orange'
               ></v-icon>
-              <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>Disruptions ({{ disruptions }})</h3>
-            </div>
-            <div
-              v-if='disruptionsExpanded'
-              class='mt-2'
-            >
-              Lorem ipsm dolor sit amet
+              <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>Disruptions ({{ currentDisruptions.length }})</h3>
             </div>
           </div>
+          <disruption-list
+            v-if='disruptionsExpanded'
+            :disruptionList='currentDisruptions'
+            class='w-100'
+          ></disruption-list>
         </v-card>
       </v-col>
     </v-row>
@@ -91,7 +88,7 @@
             role='button'
             class='card-expand-button float-right pa-1'
           ></v-icon>
-          <div class='card-content'>
+          <div class='card-title'>
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-routes'
@@ -99,17 +96,17 @@
               ></v-icon>
               <h3 class='d-inline-block fill-height ms-2'>Routes</h3>
             </div>
-            <route-chips
-              :routes-list='stopData.routes'
-              :route-type='stopData.route_type'
-              :max-chips='routesExpanded ? 0 : maxChips'
-              :truncate-chips='!routesExpanded'
-              :chip-links='true'
-              :expandable='true'
-              @expand='routesExpanded = true'
-              class='mt-2'
-            ></route-chips>
           </div>
+          <route-chips
+            :routes-list='stopData.routes'
+            :route-type='stopData.route_type'
+            :max-chips='routesExpanded ? 0 : maxChips'
+            :truncate-chips='!routesExpanded'
+            :chip-links='true'
+            :expandable='true'
+            @expand='routesExpanded = true'
+            class='mt-2 w-100'
+          ></route-chips>
         </v-card>
       </v-col>
     </v-row>
@@ -137,12 +134,14 @@ import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
 // Child components
+import DisruptionList from '../components/SectionDisruptionList.vue'
 import RouteChips from '../components/SectionRouteChips.vue'
 
 export default defineComponent({
   name: 'ViewStop',
 
   components: { // Child components
+    DisruptionList,
     RouteChips
   },
 
@@ -154,7 +153,6 @@ export default defineComponent({
   data: function () { // Default data
     return {
       stopData: '',
-      disruptions: 0,
       disruptionData: '',
       disruptionsExpanded: false,
       routesExpanded: false
@@ -186,6 +184,12 @@ export default defineComponent({
         if (this.stopData.route_type === 1 || this.stopData.route_type === 2) return 14
         else return 15
       } else return 0
+    },
+
+    currentDisruptions: function () {
+      return this.disruptionData.filter(function (dis) {
+        return dis.disruption_status === 'Current'
+      })
     }
   },
 
@@ -203,8 +207,7 @@ export default defineComponent({
           if (this.stopData.routes.length < this.maxChips) {
             this.routesExpanded = true
           }
-          this.disruptionData = data.disruptions
-          this.disruptions = Object.keys(this.disruptionData).length
+          this.disruptionData = Object.values(data.disruptions)
         })
         .catch((error) => {
           console.log(error)
@@ -227,7 +230,26 @@ export default defineComponent({
   background: rgba(var(--v-theme-surface-variant), 1) !important;
 }
 
-.card-content {
+.fav-button {
+  max-width: 20%;
+}
+
+.stop-heading {
+  max-width: 80%;
+}
+
+.stop-heading-card {
+  width: 70px;
+  height: 70px;
+  flex: 0 0 70px;
+}
+
+.stop-heading-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.card-title {
   max-width: 90%;
 }
 
