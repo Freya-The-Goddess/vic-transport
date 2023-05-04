@@ -1,15 +1,25 @@
 <template>
-  <v-container v-if='!stopData'>
+  <v-container v-if='!stopData || stopError'>
     <v-row>
       <v-col>
-        <v-card class='pa-4'>
+        <v-card
+          v-if='!stopData && !stopError'
+          class='pa-4'
+        >
           <v-progress-circular
             indeterminate
             :size='20'
             :width='3'
             class='me-2'
           ></v-progress-circular>
-          <span class='ms-2'>Loading...</span>
+          <span class='ms-2'>Loading Stop Data...</span>
+        </v-card>
+        <v-card
+          v-if='stopError'
+          class='pa-4'
+        >
+          <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
+          <span class='text-error-text font-weight-bold float-left ms-1'>Stop Data Request Error</span>
         </v-card>
       </v-col>
     </v-row>
@@ -155,6 +165,7 @@ export default defineComponent({
   data: function () { // Default data
     return {
       stopData: '',
+      stopError: false,
       disruptionData: '',
       disruptionsExpanded: false,
       routesExpanded: false
@@ -210,8 +221,10 @@ export default defineComponent({
             this.routesExpanded = true
           }
           this.disruptionData = Object.values(data.disruptions)
+          this.searchError = false
         })
         .catch((error) => {
+          this.stopError = true
           console.log(error)
         })
     },

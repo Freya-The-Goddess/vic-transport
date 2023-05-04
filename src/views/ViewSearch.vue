@@ -35,7 +35,7 @@
             :width='3'
             class='me-2'
           ></v-progress-circular>
-          <span class='ms-2'>Loading...</span>
+          <span class='ms-2'>Loading Results...</span>
         </v-card>
         <v-card
           v-if='!searchLoading && !jsonStops.length'
@@ -47,7 +47,8 @@
           v-if='searchError'
           class='pa-4'
         >
-          <span class="text-error-text">Search Error</span>
+          <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
+          <span class='text-error-text font-weight-bold float-left ms-1'>Search Request Error</span>
         </v-card>
       </v-col>
     </v-row>
@@ -134,6 +135,7 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonStops = data.stops.toSorted(function (a, b) { return a.route_type - b.route_type })
+          this.searchError = false
           this.searchLoading = false
         })
         .catch((error) => {
