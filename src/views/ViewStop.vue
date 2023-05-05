@@ -166,7 +166,7 @@ export default defineComponent({
     return {
       stopData: '',
       stopError: false,
-      disruptionData: '',
+      disruptionData: [],
       disruptionsExpanded: false,
       routesExpanded: false
     }
@@ -199,32 +199,57 @@ export default defineComponent({
       } else return 0
     },
 
+    // Filter disruptions list for only current disruptions
     currentDisruptions: function () {
-      return this.disruptionData.filter(function (dis) {
-        return dis.disruption_status === 'Current'
-      })
+      if (this.disruptionData.length) {
+        return this.disruptionData.filter(function (dis) {
+          return dis.disruption_status === 'Current'
+        })
+      } else return []
     }
   },
 
   mounted: function () {
-    this.getStopData(this.$route.params.stopId, this.$route.params.routeType)
+    this.getStopRequest(this.$route.params.stopId, this.$route.params.routeType)
+    this.getDisruptionsRequest(this.$route.params.stopId)
   },
 
   methods: {
     // Query API for stop data
-    getStopData: function (stopId, routeType) {
-      const request = `/v3/stops/${stopId}/route_type/${routeType}?stop_disruptions=true`
+    getStopRequest: function (stopId, routeType) {
+      const request = `/v3/stops/${stopId}/route_type/${routeType}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.stopData = data.stop
           if (this.stopData.routes.length < this.maxChips) {
             this.routesExpanded = true
           }
-          this.disruptionData = Object.values(data.disruptions)
           this.searchError = false
         })
         .catch((error) => {
           this.stopError = true
+          console.log(error)
+        })
+    },
+
+    // Query API for disruptions at stop
+    getDisruptionsRequest: function (stopId) {
+      const request = `/v3/disruptions/stop/${stopId}`
+      this.$root.ptvApiRequest(request)
+        .then((data) => {
+          const disruptions = []
+          Object.values(data.disruptions).forEach((disType) => {
+            disType.forEach((dis) => {
+              if (dis.disruption_status === 'Current') {
+                disruptions.push(dis)
+              }
+            })
+          })
+          this.disruptionData = disruptions
+          this.disruptionError = false
+        })
+        .catch((error) => {
+          this.disruptionError = true
           console.log(error)
         })
     },

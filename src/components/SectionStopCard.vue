@@ -126,20 +126,19 @@ export default {
   },
 
   mounted: function () {
-    this.getDisruptions()
+    this.getDisruptionsRequest(this.stop.stop_id)
   },
 
   methods: {
     // Query API for disruptions at stop
-    getDisruptions: function () {
-      const self = this
-      const request = `/v3/disruptions/stop/${this.stop.stop_id}`
+    getDisruptionsRequest: function (stopId) {
+      const request = `/v3/disruptions/stop/${stopId}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
-          Object.values(data.disruptions).forEach(function (disType) {
-            disType.forEach(function (dis) {
+          Object.values(data.disruptions).forEach((disType) => {
+            disType.forEach((dis) => {
               if (dis.disruption_status === 'Current') {
-                self.disruption = true
+                this.disruption = true
                 return null // Exit loop
               }
             })

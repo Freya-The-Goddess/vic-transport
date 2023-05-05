@@ -102,11 +102,11 @@ export default defineComponent({
     if (this.$route.params.routeTypes) {
       this.filterRouteTypes = this.$route.params.routeTypes.split(',') // Get route types from URL params
     }
-    this.search()
+    this.debouncedSearch()
   },
 
   methods: {
-    // Sanitise search string, push to route, and run search API
+    // Sanitise search string, push to route, and run search to API
     search: function () {
       this.jsonStops = []
       this.searchError = false
@@ -125,7 +125,7 @@ export default defineComponent({
       }
     },
 
-    // Generate request string and run API get request
+    // Query API for stops matching search
     searchRequest: function (searchString) {
       let request = `/v3/search/${encodeURIComponent(searchString)}`
       this.filterRouteTypes.forEach(function (routeType) {
