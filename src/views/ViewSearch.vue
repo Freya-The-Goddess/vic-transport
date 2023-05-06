@@ -38,17 +38,17 @@
           <span class='ms-2'>Loading Results...</span>
         </v-card>
         <v-card
-          v-if='!searchLoading && !jsonStops.length'
-          class='pa-4'
-        >
-          <span>No Results</span>
-        </v-card>
-        <v-card
-          v-if='searchError'
+          v-else-if='searchError'
           class='pa-4'
         >
           <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
           <span class='text-error-text font-weight-bold float-left ms-1'>Search Request Error</span>
+        </v-card>
+        <v-card
+          v-else-if='!jsonStops.length'
+          class='pa-4'
+        >
+          <span>No Results</span>
         </v-card>
       </v-col>
     </v-row>
