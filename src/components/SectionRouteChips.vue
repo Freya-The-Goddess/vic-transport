@@ -3,21 +3,26 @@
     <v-chip
       v-for='(route, index) in trimmedChipList'
       :key='index'
+      :disabled='!selectable'
+      :filter='selectable'
       variant='outlined'
-      :disabled='!chipLinks'
       style='opacity: 1'
       :class='"text-" + $root.routeTypes[route.route_type].route_type_color'
     >
       <span class='text-caption text-over-color'>{{ route.short_name }}</span>
     </v-chip>
-    <v-chip
+    <div
       v-if='extraChips'
       @click='expand'
-      variant='outlined'
-      :disabled='!expandable'
-      style='opacity: 1'
-      class='text-caption'
-    >+{{ extraChips }} more...</v-chip>
+      role='button'
+    >
+      <v-chip
+        :disabled='true'
+        variant='outlined'
+        style='opacity: 1'
+        class='text-caption'
+      >+{{ extraChips }} more...</v-chip>
+    </div>
   </v-chip-group>
 </template>
 
@@ -30,7 +35,7 @@ export default {
     'routeType',
     'maxChips',
     'truncateChips',
-    'chipLinks',
+    'selectable',
     'expandable'
   ],
 

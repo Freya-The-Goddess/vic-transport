@@ -114,7 +114,7 @@
             :route-type='stopData.route_type'
             :max-chips='routesExpanded ? 0 : maxChips'
             :truncate-chips='!routesExpanded'
-            :chip-links='true'
+            :selectable='!!(stopData.routes.length-1)'
             :expandable='true'
             @expand='routesExpanded = true'
             class='mt-2 w-100'

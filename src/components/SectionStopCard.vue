@@ -55,7 +55,7 @@
             :route-type='stop.route_type'
             :max-chips='maxChips'
             :truncate-chips='true'
-            :chip-links='false'
+            :selectable='false'
             :expandable='false'
           ></route-chips>
         </div>
