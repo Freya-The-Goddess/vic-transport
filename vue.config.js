@@ -8,5 +8,8 @@ module.exports = defineConfig({
     vuetify: {
       // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
     }
+  },
+  css: {
+    extract: { ignoreOrder: true }
   }
 })
