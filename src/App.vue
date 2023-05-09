@@ -47,7 +47,7 @@ export default {
       return new Promise((resolve, reject) => {
         const url = process.env.NODE_ENV === 'development'
           ? location.protocol + '//localhost/get-request-url.php' // Development url
-          : './php/get-request-url.php' // Production url
+          : process.env.BASE_URL + '/php/get-request-url.php' // Production url
         $.ajax({
           url: url,
           type: 'GET',

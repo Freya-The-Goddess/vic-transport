@@ -1,4 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
+
 import ViewFavourites from '../views/ViewFavourites.vue'
 
 const routes = [
@@ -25,7 +26,7 @@ const routes = [
   {
     path: '/search/:searchString/route_types/:routeTypes?',
     name: 'advancedSearch',
-    component: () => import(/* webpackChunkName: "advancedSearch" */ '../views/ViewSearch.vue')
+    component: () => import(/* webpackChunkName: "search" */ '../views/ViewSearch.vue')
   },
   {
     path: '/stop/:stopId/route_type/:routeType',
@@ -35,7 +36,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 
