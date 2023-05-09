@@ -1,5 +1,5 @@
 <template>
-  <div id="app-header" class="bg-header-footer-grey">
+  <div id='app-header' class='bg-header-footer-grey'>
     <v-container>
       <v-row>
         <v-col>

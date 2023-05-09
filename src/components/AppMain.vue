@@ -1,7 +1,7 @@
 <template>
-  <div id="app-main" class="h-100">
+  <v-main id='app-main'>
     <router-view></router-view>
-  </div>
+  </v-main>
 </template>
 
 <script>
@@ -9,3 +9,9 @@ export default {
   name: 'AppMain'
 }
 </script>
+
+<style>
+#app-main {
+  min-height: 80%;
+}
+</style>
