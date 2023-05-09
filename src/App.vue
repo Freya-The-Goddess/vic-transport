@@ -11,19 +11,19 @@
 import $ from 'jquery'
 
 // App components
-import AppHeader from './components/AppHeader.vue'
-import AppNav from './components/AppNav.vue'
-import AppMain from './components/AppMain.vue'
 import AppFooter from './components/AppFooter.vue'
+import AppHeader from './components/AppHeader.vue'
+import AppMain from './components/AppMain.vue'
+import AppNav from './components/AppNav.vue'
 
 export default {
   name: 'App',
 
   components: { // App components
+    AppFooter,
     AppHeader,
     AppNav,
-    AppMain,
-    AppFooter
+    AppMain
   },
 
   data: function () { // Default data

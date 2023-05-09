@@ -24,8 +24,8 @@
 
 <script>
 // Child components
-import StopCard from '../components/SectionStopCard.vue'
 import PaginationButtons from '../components/SectionPagination.vue'
+import StopCard from '../components/SectionStopCard.vue'
 
 export default {
   name: 'StopList',
@@ -35,8 +35,8 @@ export default {
   ],
 
   components: { // Child components
-    StopCard,
-    PaginationButtons
+    PaginationButtons,
+    StopCard
   },
 
   data: function () { // Default data
