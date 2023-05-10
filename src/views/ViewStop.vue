@@ -94,51 +94,53 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if='currentDisruptions.length'>
-      <v-col>
-        <v-card class='pa-3'>
-          <v-icon
-            :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
-            @click='disruptionsExpanded = !disruptionsExpanded'
-            role='button'
-            class='card-expand-button float-right pa-1'
-          ></v-icon>
-          <div class='card-title'>
-            <div class='d-flex align-center'>
-              <v-icon
-                icon='mdi-alert-circle'
-                class='d-inline-block fill-height text-disruption-orange'
-              ></v-icon>
-              <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>Disruptions ({{ currentDisruptions.length }})</h3>
+    <v-expand-transition>
+      <v-row v-if='currentDisruptions.length'>
+        <v-col>
+          <v-card class='pa-3'>
+            <v-icon
+              :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+              @click='disruptionsExpanded = !disruptionsExpanded'
+              role='button'
+              class='card-expand-button float-right pa-1'
+            ></v-icon>
+            <div class='card-title'>
+              <div class='d-flex align-center'>
+                <v-icon
+                  icon='mdi-alert-circle'
+                  class='d-inline-block fill-height text-disruption-orange'
+                ></v-icon>
+                <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>Disruptions ({{ currentDisruptions.length }})</h3>
+              </div>
             </div>
-          </div>
-          <v-expand-transition>
-            <template
-              v-if='disruptionsExpanded'
-            >
-              <div v-if='disruptionsLoading && !disruptionsError'>
-                <v-progress-circular
-                  indeterminate
-                  :size='20'
-                  :width='3'
-                  class='me-2'
-                ></v-progress-circular>
-                <span class='ms-2'>Loading Disruptions...</span>
-              </div>
-              <div v-else-if='disruptionsError'>
-                <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
-                <span class='text-error-text font-weight-bold float-left ms-1'>Disruption Request Error</span>
-              </div>
-              <disruption-list
-                v-else-if='disruptionData.length'
-                :disruptionList='currentDisruptions'
-                class='w-100'
-              ></disruption-list>
-            </template>
-          </v-expand-transition>
-        </v-card>
-      </v-col>
-    </v-row>
+            <v-expand-transition>
+              <template
+                v-if='disruptionsExpanded'
+              >
+                <div v-if='disruptionsLoading && !disruptionsError'>
+                  <v-progress-circular
+                    indeterminate
+                    :size='20'
+                    :width='3'
+                    class='me-2'
+                  ></v-progress-circular>
+                  <span class='ms-2'>Loading Disruptions...</span>
+                </div>
+                <div v-else-if='disruptionsError'>
+                  <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
+                  <span class='text-error-text font-weight-bold float-left ms-1'>Disruption Request Error</span>
+                </div>
+                <disruption-list
+                  v-else-if='disruptionData.length'
+                  :disruptionList='currentDisruptions'
+                  class='w-100'
+                ></disruption-list>
+              </template>
+            </v-expand-transition>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-expand-transition>
     <v-row>
       <v-col>
         <v-card class='pa-3'>
