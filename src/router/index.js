@@ -32,6 +32,11 @@ const routes = [
     path: '/stop/:stopId/route_type/:routeType',
     name: 'stop',
     component: () => import(/* webpackChunkName: "search" */ '../views/ViewStop.vue')
+  },
+  { // route not found catch-all
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import(/* webpackChunkName: "notFound" */ '../views/ViewNotFound.vue')
   }
 ]
 
