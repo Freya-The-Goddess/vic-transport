@@ -95,7 +95,7 @@
       </v-col>
     </v-row>
     <v-expand-transition>
-      <v-row v-if='currentDisruptions.length'>
+      <v-row v-if='currentDisruptions.length || disruptionsLoading'>
         <v-col>
           <v-card class='pa-3'>
             <v-icon
@@ -106,11 +106,22 @@
             ></v-icon>
             <div class='card-title'>
               <div class='d-flex align-center'>
+                <v-progress-circular
+                  v-if='disruptionsLoading && !disruptionsExpanded'
+                  indeterminate
+                  :size='20'
+                  :width='3'
+                  class='me-1 text-disruption-orange'
+                ></v-progress-circular>
                 <v-icon
+                  v-else
                   icon='mdi-alert-circle'
                   class='d-inline-block fill-height text-disruption-orange'
                 ></v-icon>
-                <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>Disruptions ({{ currentDisruptions.length }})</h3>
+                <h3 class='d-inline-block fill-height text-disruption-orange ms-2'>
+                  Disruptions
+                  <span v-if='currentDisruptions.length'>({{ currentDisruptions.length }})</span>
+                </h3>
               </div>
             </div>
             <v-expand-transition>
