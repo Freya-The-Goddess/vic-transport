@@ -7,12 +7,11 @@ import { createVuetify } from 'vuetify'
 
 export default createVuetify({
   theme: {
-    defaultTheme: 'dark',
     themes: {
       light: {
         dark: false,
         colors: {
-          'header-footer-grey': '#455A64', // blue-grey-darken-2
+          'header-footer-grey': '#455A64',
           'network-grey': '#333434',
           'over-color': '#000000',
           'error-text': '#BB1100',
@@ -29,7 +28,7 @@ export default createVuetify({
       dark: {
         dark: true,
         colors: {
-          'header-footer-grey': '#263238', // blue-grey-darken-4
+          'header-footer-grey': '#263238',
           'network-grey': '#333434',
           'over-color': '#FFFFFF',
           'error-text': '#FF5544',
