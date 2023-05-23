@@ -4,13 +4,13 @@
       <v-row>
         <v-col cols='3'>
           <router-link
-            to='/'
+            to='/favourites'
             custom
             v-slot='{ navigate }'
           >
             <v-btn
               @click='navigate'
-              :color='$route.path === "/" ? "nav-button-selected" : "nav-button"'
+              :color='$route.path === "/favourites" ? "nav-button-selected" : "nav-button"'
               class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>

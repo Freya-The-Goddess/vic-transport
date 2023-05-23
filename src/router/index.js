@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import ViewFavourites from '../views/ViewFavourites.vue'
-
 const routes = [
   {
     path: '/',
+    redirect: '/favourites'
+  },
+  {
+    path: '/favourites',
     name: 'favourites',
-    component: ViewFavourites
+    component: () => import(/* webpackChunkName: "favourites" */ '../views/ViewFavourites.vue')
   },
   {
     path: '/routes/:routeType?',
