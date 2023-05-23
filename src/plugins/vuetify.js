@@ -12,6 +12,8 @@ export default createVuetify({
         dark: false,
         colors: {
           'header-footer-grey': '#455A64',
+          'nav-button': '#B0BEC5',
+          'nav-button-selected': '#ECEFF1',
           'network-grey': '#333434',
           'over-color': '#000000',
           'error-text': '#BB1100',
@@ -29,6 +31,8 @@ export default createVuetify({
         dark: true,
         colors: {
           'header-footer-grey': '#263238',
+          'nav-button': '#151B1E',
+          'nav-button-selected': '#455A64',
           'network-grey': '#333434',
           'over-color': '#FFFFFF',
           'error-text': '#FF5544',
