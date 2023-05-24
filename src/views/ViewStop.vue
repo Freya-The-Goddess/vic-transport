@@ -1,4 +1,5 @@
 <template>
+  <!-- Loading and Error Cards -->
   <v-container v-if='!stopData || stopError'>
     <v-row>
       <v-col>
@@ -24,7 +25,9 @@
       </v-col>
     </v-row>
   </v-container>
+  <!-- Stop Data -->
   <v-container v-else>
+    <!-- Stop Header -->
     <v-row>
       <v-col>
         <v-tooltip
@@ -62,6 +65,7 @@
         </div>
       </v-col>
     </v-row>
+    <!-- Stop Routes -->
     <v-row>
       <v-col>
         <v-card class='pa-3'>
@@ -94,6 +98,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- Stop Disruptions -->
     <v-expand-transition>
       <v-row v-if='currentDisruptions.length || disruptionsLoading'>
         <v-col>
@@ -125,9 +130,7 @@
               </div>
             </div>
             <v-expand-transition>
-              <template
-                v-if='disruptionsExpanded'
-              >
+              <template v-if='disruptionsExpanded'>
                 <div v-if='disruptionsLoading && !disruptionsError'>
                   <v-progress-circular
                     indeterminate
@@ -152,6 +155,7 @@
         </v-col>
       </v-row>
     </v-expand-transition>
+    <!-- Stop Departures -->
     <v-row>
       <v-col>
         <v-card class='pa-3'>
