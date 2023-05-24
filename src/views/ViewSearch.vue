@@ -134,42 +134,33 @@ export default defineComponent({
   mounted: function () {
     this.strSearchInput = this.$route.query.q // Get search string from URL params
     if (this.$route.query.rt) {
-      this.filterRouteTypes = this.$route.query.rt.split(',') // Get route types from URL params
+      this.filterRouteTypes = this.$route.query.rt.split(' ') // Get route types from URL params
     }
     this.debouncedSearch()
   },
 
   methods: {
-    // Sanitise search string, push to route, and run search to API
+    // Sanitise search string, push queries to route, and run search to API
     search: function () {
       this.jsonStops = []
       this.searchError = false
       const searchString = this.strSearchInput
-        ? this.strSearchInput.replace(/[?&*=:<>/\\]/, '').trimEnd() // Remove forbidden characters and trailing whitespace
+        ? this.strSearchInput.replace(/[#?&*=:<>/\\]/, '').trimEnd() // Remove forbidden characters and trailing whitespace
         : ''
+      let urlQuery = {}
       if (searchString) {
         this.searchLoading = true
-        if (this.filterRouteTypes.length > 0) { // If route type filters selected append to URL path
-          this.$router.push({ // Push new search parameters to URL
-            path: '/search',
-            query: {
-              q: searchString,
-              rt: this.filterRouteTypes.toString()
-            }
-          })
-        } else {
-          this.$router.push({ // Push new search parameters to URL
-            path: '/search',
-            query: {
-              q: searchString
-            }
-          })
-        }
+        urlQuery = this.filterRouteTypes.length > 0
+          ? { q: searchString, rt: this.filterRouteTypes.toString().replace(/,/, ' ') }
+          : { q: searchString }
         this.searchRequest(searchString) // Run search request
       } else {
         this.searchLoading = false
-        this.$router.push({ path: '/search' }) // Push blank search URL
       }
+      this.$router.push({ // Push new search query to URL
+        path: '/search',
+        query: urlQuery
+      })
     },
 
     // Query API for stops matching search
