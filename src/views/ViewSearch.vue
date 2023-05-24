@@ -21,7 +21,7 @@
     </v-row>
     <route-type-select
       :multiple='true'
-                :select-route-types='$route.query.routeTypes'
+                :select-route-types='$route.query.rt'
       @selected-route-types='getRouteTypes'
     ></route-type-select>
     <!-- Search Results -->
@@ -100,9 +100,9 @@ export default defineComponent({
   },
 
   mounted: function () {
-    this.strSearchInput = this.$route.query.searchString // Get search string from URL params
-    if (this.$route.query.routeTypes) {
-      this.filterRouteTypes = this.$route.query.routeTypes.split(',') // Get route types from URL params
+    this.strSearchInput = this.$route.query.q // Get search string from URL params
+    if (this.$route.query.rt) {
+      this.filterRouteTypes = this.$route.query.rt.split(',') // Get route types from URL params
     }
     this.debouncedSearch()
   },
@@ -112,22 +112,24 @@ export default defineComponent({
     search: function () {
       this.jsonStops = []
       this.searchError = false
-      const searchString = this.strSearchInput.replace(/[?&*=:<>/\\]/, '').trimEnd() // Remove forbidden characters and trailing whitespace
+      const searchString = this.strSearchInput
+        ? this.strSearchInput.replace(/[?&*=:<>/\\]/, '').trimEnd() // Remove forbidden characters and trailing whitespace
+        : ''
       if (searchString) {
         this.searchLoading = true
         if (this.filterRouteTypes.length > 0) { // If route type filters selected append to URL path
           this.$router.push({ // Push new search parameters to URL
             path: '/search',
             query: {
-              searchString: searchString,
-              routeType: this.filterRouteTypes
+              q: searchString,
+              rt: this.filterRouteTypes.toString()
         }
           })
         } else {
           this.$router.push({ // Push new search parameters to URL
             path: '/search',
             query: {
-              searchString: searchString
+              q: searchString
             }
           })
         }
