@@ -6,7 +6,7 @@
       cols='3'
     >
       <v-btn
-        :color='routeTypeSelected(routeType.toString()) ? $root.routeTypes[routeType].route_type_color : ""'
+        :color='$root.routeTypes[routeType].route_type_color + (routeTypeSelected(routeType.toString()) ? "" : "-dim")'
         @click='selectRouteType(routeType.toString())'
         class='text-over-color rounded-xl w-100 h-100 pt-2 pb-2 pt-md-1 pb-md-1'
       >
@@ -23,8 +23,12 @@
               class='d-inline d-md-none'
             ></v-icon>
           </div>
-          <div class='text-caption text-md-button d-none d-sm-block'>{{ $root.routeTypes[routeType].route_type_name.toUpperCase() }}</div>
-          <div class='text-caption d-block d-sm-none'>{{ $root.routeTypes[routeType].route_type_short_name.toUpperCase() }}</div>
+          <div class='text-caption text-md-button d-none d-sm-block'>
+            {{ $root.routeTypes[routeType].route_type_name.toUpperCase() }}
+          </div>
+          <div class='text-caption d-block d-sm-none'>
+            {{ $root.routeTypes[routeType].route_type_short_name.toUpperCase() }}
+          </div>
         </div>
       </v-btn>
     </v-col>
