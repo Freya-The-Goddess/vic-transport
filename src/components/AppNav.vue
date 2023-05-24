@@ -10,7 +10,7 @@
           >
             <v-btn
               @click='navigate'
-              :color='$route.path === "/favourites" ? "nav-button-selected" : "nav-button"'
+              :color='$route.name === "favourites" ? "nav-button-selected" : "nav-button"'
               class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
@@ -32,7 +32,7 @@
           >
             <v-btn
               @click='navigate'
-              :color='$route.path === "/routes" ? "nav-button-selected" : "nav-button"'
+              :color='$route.name === "routes" ? "nav-button-selected" : "nav-button"'
               class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
@@ -53,7 +53,7 @@
           >
             <v-btn
               @click='navigate'
-              :color='$route.path === "/nearby" ? "nav-button-selected" : "nav-button"'
+              :color='$route.name === "nearby" ? "nav-button-selected" : "nav-button"'
               class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
@@ -74,7 +74,7 @@
           >
             <v-btn
               @click='navigate'
-              :color='$route.path === "/search" ? "nav-button-selected" : "nav-button"'
+              :color='$route.name === "search" || $route.name === "advancedSearch" ? "nav-button-selected" : "nav-button"'
               class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
