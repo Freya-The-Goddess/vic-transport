@@ -5,6 +5,7 @@
         <h2>Search Stops</h2>
       </v-col>
     </v-row>
+    <!-- Search Input -->
     <v-row>
       <v-col>
         <v-text-field
@@ -20,9 +21,10 @@
     </v-row>
     <route-type-select
       :multiple='true'
-      :select-route-types='$route.params.routeTypes'
+                :select-route-types='$route.query.routeTypes'
       @selected-route-types='getRouteTypes'
     ></route-type-select>
+    <!-- Search Results -->
     <v-row v-if='searchLoading || (!searchLoading && !jsonStops.length) || searchError'>
       <v-col>
         <v-card
@@ -98,9 +100,9 @@ export default defineComponent({
   },
 
   mounted: function () {
-    this.strSearchInput = this.$route.params.searchString // Get search string from URL params
-    if (this.$route.params.routeTypes) {
-      this.filterRouteTypes = this.$route.params.routeTypes.split(',') // Get route types from URL params
+    this.strSearchInput = this.$route.query.searchString // Get search string from URL params
+    if (this.$route.query.routeTypes) {
+      this.filterRouteTypes = this.$route.query.routeTypes.split(',') // Get route types from URL params
     }
     this.debouncedSearch()
   },
@@ -113,11 +115,22 @@ export default defineComponent({
       const searchString = this.strSearchInput.replace(/[?&*=:<>/\\]/, '').trimEnd() // Remove forbidden characters and trailing whitespace
       if (searchString) {
         this.searchLoading = true
-        let path = `/search/${encodeURIComponent(searchString)}`
         if (this.filterRouteTypes.length > 0) { // If route type filters selected append to URL path
-          path += `/route_types/${encodeURIComponent(this.filterRouteTypes)}`
+          this.$router.push({ // Push new search parameters to URL
+            path: '/search',
+            query: {
+              searchString: searchString,
+              routeType: this.filterRouteTypes
         }
-        this.$router.push({ path: path }) // Push new search parameters to URL
+          })
+        } else {
+          this.$router.push({ // Push new search parameters to URL
+            path: '/search',
+            query: {
+              searchString: searchString
+            }
+          })
+        }
         this.searchRequest(searchString) // Run search request
       } else {
         this.searchLoading = false

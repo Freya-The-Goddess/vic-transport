@@ -21,13 +21,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "nearby" */ '../views/ViewNearby.vue')
   },
   {
-    path: '/search/:searchString?',
+    path: '/search',
     name: 'search',
-    component: () => import(/* webpackChunkName: "search" */ '../views/ViewSearch.vue')
-  },
-  {
-    path: '/search/:searchString/route_types/:routeTypes?',
-    name: 'advancedSearch',
     component: () => import(/* webpackChunkName: "search" */ '../views/ViewSearch.vue')
   },
   {
