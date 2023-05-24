@@ -19,12 +19,42 @@
         ></v-text-field>
       </v-col>
     </v-row>
-    <route-type-select
-      :multiple='true'
+    <!-- Search Filters -->
+    <v-row>
+      <v-col>
+        <v-card class='pa-3'>
+          <v-icon
+            :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+            @click='filtersExpanded = !filtersExpanded'
+            role='button'
+            class='card-expand-button float-right pa-1'
+          ></v-icon>
+          <div
+            @click='filtersExpanded = !filtersExpanded'
+            role='button'
+            class='card-title'
+          >
+            <div class='d-flex align-center'>
+              <v-icon
+                icon='mdi-filter'
+                class='d-inline-block fill-height'
+              ></v-icon>
+              <h3 class='d-inline-block fill-height ms-2'>Search Filters</h3>
+            </div>
+          </div>
+          <v-expand-transition>
+            <div v-show='filtersExpanded' class='pt-5'>
+              <route-type-select
+                :multiple='true'
                 :select-route-types='$route.query.rt'
-      @selected-route-types='getRouteTypes'
-    ></route-type-select>
-    <!-- Search Results -->
+                @selected-route-types='getRouteTypes'
+              ></route-type-select>
+            </div>
+          </v-expand-transition>
+        </v-card>
+      </v-col>
+    </v-row>
+    <!-- Loading and Error Cards -->
     <v-row v-if='searchLoading || (!searchLoading && !jsonStops.length) || searchError'>
       <v-col>
         <v-card
@@ -54,6 +84,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- Search Results -->
     <stop-list
       :stop-list='jsonStops'
     ></stop-list>
@@ -81,7 +112,8 @@ export default defineComponent({
       searchLoading: false,
       searchError: false,
       jsonStops: [],
-      filterRouteTypes: []
+      filterRouteTypes: [],
+      filtersExpanded: false
     }
   },
 
@@ -123,7 +155,7 @@ export default defineComponent({
             query: {
               q: searchString,
               rt: this.filterRouteTypes.toString()
-        }
+            }
           })
         } else {
           this.$router.push({ // Push new search parameters to URL
@@ -182,3 +214,13 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+.card-title {
+  max-width: 90%;
+}
+
+.card-expand-button {
+  max-width: 10%;
+}
+</style>
