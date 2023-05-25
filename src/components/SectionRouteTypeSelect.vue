@@ -64,7 +64,7 @@ export default {
   mounted: function () {
     // Populate selection from props
     if (this.selectRouteTypes) {
-      this.routeTypes = this.selectRouteTypes.split(',')
+      this.routeTypes = this.selectRouteTypes
     }
   },
 
