@@ -46,7 +46,7 @@
             <div v-show='filtersExpanded' class='pt-5'>
               <route-type-select
                 :multiple='true'
-                :select-route-types='$route.query.rt'
+                :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : []'
                 @selected-route-types='getRouteTypes'
               ></route-type-select>
             </div>
@@ -126,46 +126,43 @@ export default defineComponent({
   created: function () {
     // Mount debounced search function
     this.debouncedSearch = this.debounce(500, function () {
-      if (this.strSearchInput) { this.searchLoading = true }
       this.search()
     })
   },
 
   mounted: function () {
     this.strSearchInput = this.$route.query.q // Get search string from URL params
-    if (this.$route.query.rt) {
-      this.filterRouteTypes = this.$route.query.rt.split(' ') // Get route types from URL params
-    }
+    if (this.$route.query.rt) this.filterRouteTypes = this.$route.query.rt.split(' ') // Get route types from URL params
     this.debouncedSearch()
   },
 
   methods: {
     // Sanitise search string, push queries to route, and run search to API
     search: function () {
-      this.jsonStops = []
+      if (this.strSearchInput) { this.searchLoading = true }
       this.searchError = false
+      this.jsonStops = []
       const searchString = this.strSearchInput
-        ? this.strSearchInput.replace(/[#?&*=:<>/\\]/, '').trimEnd() // Remove forbidden characters and trailing whitespace
+        ? this.strSearchInput.replaceAll(/[#?&*=:<>/\\]/g, '').trimEnd() // Remove forbidden characters and trailing whitespace
         : ''
-      let urlQuery = {}
-      if (searchString) {
-        this.searchLoading = true
-        urlQuery = this.filterRouteTypes.length > 0
-          ? { q: searchString, rt: this.filterRouteTypes.toString().replace(/,/, ' ') }
-          : { q: searchString }
-        this.searchRequest(searchString) // Run search request
-      } else {
-        this.searchLoading = false
-      }
+      const urlQuery = {}
+      if (searchString) urlQuery.q = searchString
+      if (this.filterRouteTypes.length) urlQuery.rt = this.filterRouteTypes.toString().replaceAll(/,/g, ' ')
       this.$router.push({ // Push new search query to URL
         path: '/search',
         query: urlQuery
       })
+      if (searchString) {
+        this.searchLoading = true
+        this.searchRequest() // Run search request
+      } else {
+        this.searchLoading = false
+      }
     },
 
     // Query API for stops matching search
-    searchRequest: function (searchString) {
-      let request = `/v3/search/${encodeURIComponent(searchString)}`
+    searchRequest: function () {
+      let request = `/v3/search/${encodeURIComponent(this.searchString)}`
       this.filterRouteTypes.forEach(function (routeType) {
         request += request.includes('?') ? '&' : '?'
         request += 'route_types=' + routeType

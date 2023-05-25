@@ -32,6 +32,7 @@
             <div v-show='filtersExpanded' class='pt-5'>
               <route-type-select
                 :multiple='true'
+                :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : []'
                 @selected-route-types='getRouteTypes'
               ></route-type-select>
             </div>
@@ -125,14 +126,14 @@ export default defineComponent({
   created: function () {
     // Mount debounced search function
     this.debouncedRequest = this.debounce(500, function () {
-      if (this.location.lat && this.location.long) { this.searchLoading = true }
-      this.locationStopRequest(this.location)
+      this.locationSearch()
     })
   },
 
   mounted: function () {
     this.getLocation()
-    // .then .catch
+    if (this.$route.query.rt) this.filterRouteTypes = this.$route.query.rt.split(' ') // Get route types from URL params
+    // TODO: add distance filter
   },
 
   methods: {
@@ -150,16 +151,28 @@ export default defineComponent({
         })
     },
 
-    // Query API for stops near location
-    locationStopRequest: function (location) {
-      this.jsonStops = []
+    locationSearch: function () {
+      if (this.location.lat && this.location.long) { this.searchLoading = true }
       this.searchError = false
-      let request = `/v3/stops/location/${location.lat},${location.long}`
+      this.jsonStops = []
+      const urlQuery = {}
+      if (this.filterRouteTypes.length) { urlQuery.rt = this.filterRouteTypes.toString().replaceAll(/,/g, ' ') }
+      // TODO: add distance filter to query
+      this.$router.push({ // Push new search query to URL
+        path: '/nearby',
+        query: urlQuery
+      })
+      this.locationStopRequest()
+    },
+
+    // Query API for stops near location
+    locationStopRequest: function () {
+      let request = `/v3/stops/location/${this.location.lat},${this.location.long}`
       this.filterRouteTypes.forEach(function (routeType) {
         request += request.includes('?') ? '&' : '?'
         request += 'route_types=' + routeType
       })
-      // add max distance to request
+      // TODO: add distance filter to request
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonStops = data.stops.toSorted(function (a, b) { return a.route_type - b.route_type })

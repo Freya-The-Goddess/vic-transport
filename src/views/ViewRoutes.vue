@@ -32,7 +32,7 @@
             <div v-show='filtersExpanded' class='pt-5'>
               <route-type-select
                 :multiple='false'
-                select-route-types='0'
+                :select-route-types='["0"]'
                 @selected-route-types='getRouteTypes'
               ></route-type-select>
             </div>
