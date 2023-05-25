@@ -25,7 +25,10 @@
                 icon='mdi-filter'
                 class='d-inline-block fill-height'
               ></v-icon>
-              <h3 class='d-inline-block fill-height ms-2'>Search Filters</h3>
+              <h3 class='d-inline-block fill-height ms-2'>
+                Search Filters
+                <span v-if='totalFilters'>({{ totalFilters }})</span>
+              </h3>
             </div>
           </div>
           <v-expand-transition>
@@ -120,6 +123,14 @@ export default defineComponent({
       jsonStops: [],
       filterRouteTypes: [],
       filtersExpanded: false
+    }
+  },
+
+  computed: {
+    totalFilters: function () {
+      let total = 0
+      if (this.filterRouteTypes.length) { total += 1 }
+      return total
     }
   },
 
