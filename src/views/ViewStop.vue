@@ -72,7 +72,7 @@
           <div
             v-if='stopData.routes.length > maxChips'
             @click='routesExpanded = !routesExpanded'
-            :role='stopData.routes.length > maxChips ? "button" : ""'
+            role='button'
             class='card-expand-button float-right pb-1'
           >
             <v-icon
@@ -82,7 +82,7 @@
           </div>
           <div
             @click='routesExpanded = stopData.routes.length > maxChips ? !routesExpanded : routesExpanded'
-            role='button'
+            :role='stopData.routes.length > maxChips ? "button" : ""'
             :class='stopData.routes.length > maxChips ? "card-expand-title" : "card-title"'
           >
             <div class='d-flex align-center'>
