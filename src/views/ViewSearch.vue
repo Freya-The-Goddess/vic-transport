@@ -28,10 +28,10 @@
             role='button'
             class='card-expand-button float-right pb-1'
           >
-          <v-icon
-            :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+            <v-icon
+              :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
               class='float-right'
-          ></v-icon>
+            ></v-icon>
           </div>
           <div
             @click='filtersExpanded = !filtersExpanded'
@@ -129,6 +129,12 @@ export default defineComponent({
       let total = 0
       if (this.filterRouteTypes.length) { total += 1 }
       return total
+    },
+
+    searchString: function () {
+      return this.strSearchInput
+        ? this.strSearchInput.replaceAll(/[#?&*=:<>/\\]/g, '').trimEnd() // Remove forbidden characters and trailing whitespace
+        : ''
     }
   },
 
@@ -157,17 +163,17 @@ export default defineComponent({
       if (this.strSearchInput) { this.searchLoading = true }
       this.searchError = false
       this.jsonStops = []
-      const searchString = this.strSearchInput
-        ? this.strSearchInput.replaceAll(/[#?&*=:<>/\\]/g, '').trimEnd() // Remove forbidden characters and trailing whitespace
-        : ''
+      const urlPath = '/search'
       const urlQuery = {}
-      if (searchString) urlQuery.q = searchString
+      if (this.searchString) urlQuery.q = this.searchString
       if (this.filterRouteTypes.length) urlQuery.rt = this.filterRouteTypes.toString().replaceAll(/,/g, ' ')
-      this.$router.push({ // Push new search query to URL
-        path: '/search',
-        query: urlQuery
-      })
-      if (searchString) {
+      if (this.$route.path === urlPath) { // prevents bouncing if path changes
+        this.$router.push({ // Push new search query to URL
+          path: urlPath,
+          query: urlQuery
+        })
+      }
+      if (this.searchString) {
         this.searchLoading = true
         this.searchRequest() // Run search request
       } else {

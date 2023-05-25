@@ -14,10 +14,10 @@
             role='button'
             class='card-expand-button float-right pb-1'
           >
-          <v-icon
-            :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+            <v-icon
+              :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
               class='float-right'
-          ></v-icon>
+            ></v-icon>
           </div>
           <div
             @click='filtersExpanded = !filtersExpanded'
@@ -170,13 +170,16 @@ export default defineComponent({
       if (this.location.lat && this.location.long) { this.searchLoading = true }
       this.searchError = false
       this.jsonStops = []
+      const urlPath = '/nearby'
       const urlQuery = {}
       if (this.filterRouteTypes.length) { urlQuery.rt = this.filterRouteTypes.toString().replaceAll(/,/g, ' ') }
       // TODO: add distance filter to query
-      this.$router.push({ // Push new search query to URL
-        path: '/nearby',
-        query: urlQuery
-      })
+      if (this.$route.path === urlPath) { // prevents bouncing if path changes
+        this.$router.push({ // Push new search query to URL
+          path: urlPath,
+          query: urlQuery
+        })
+      }
       this.locationStopRequest()
     },
 
