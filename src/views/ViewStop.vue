@@ -69,14 +69,18 @@
     <v-row>
       <v-col>
         <v-card class='pa-3'>
-          <v-icon
+          <div
             v-if='stopData.routes.length > maxChips'
-            :icon='routesExpanded ? "mdi-menu-up" : "mdi-menu-down"'
             @click='routesExpanded = !routesExpanded'
             role='button'
-            class='card-expand-button float-right pa-1'
-          ></v-icon>
-          <div class='card-title'>
+            class='card-expand-button float-right pb-1'
+          >
+            <v-icon
+              :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+              class='float-right'
+            ></v-icon>
+          </div>
+          <div :class='stopData.routes.length > maxChips ? "card-expand-title" : "card-title"'>
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-routes'
@@ -103,13 +107,17 @@
       <v-row v-if='currentDisruptions.length || disruptionsLoading'>
         <v-col>
           <v-card class='pa-3'>
-            <v-icon
-              :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+            <div
               @click='disruptionsExpanded = !disruptionsExpanded'
               role='button'
-              class='card-expand-button float-right pa-1'
-            ></v-icon>
-            <div class='card-title'>
+              class='card-expand-button float-right pb-1'
+            >
+              <v-icon
+                :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+                class='float-right'
+              ></v-icon>
+            </div>
+            <div :class='disruptionsExpanded = !disruptionsExpanded ? "card-expand-title" : "card-title"'>
               <div class='d-flex align-center'>
                 <v-progress-circular
                   v-if='disruptionsLoading && !disruptionsExpanded'
@@ -159,7 +167,7 @@
     <v-row>
       <v-col>
         <v-card class='pa-3'>
-          <div class='d-flex align-center'>
+          <div class='card-title d-flex align-center'>
             <v-icon
               icon='mdi-clock'
               class='d-inline-block fill-height'
@@ -328,10 +336,14 @@ export default defineComponent({
 }
 
 .card-title {
-  max-width: 90%;
+  width: 100%;
+}
+
+.card-expand-title {
+  width: calc(100% - 40px);
 }
 
 .card-expand-button {
-  max-width: 10%;
+  width: 40px;
 }
 </style>

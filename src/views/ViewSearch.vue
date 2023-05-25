@@ -23,16 +23,20 @@
     <v-row>
       <v-col>
         <v-card class='pa-3'>
-          <v-icon
-            :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
-            @click='filtersExpanded = !filtersExpanded'
-            role='button'
-            class='card-expand-button float-right pa-1'
-          ></v-icon>
           <div
             @click='filtersExpanded = !filtersExpanded'
             role='button'
-            class='card-title'
+            class='card-expand-button float-right pb-1'
+          >
+          <v-icon
+            :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+              class='float-right'
+          ></v-icon>
+          </div>
+          <div
+            @click='filtersExpanded = !filtersExpanded'
+            role='button'
+            class='card-expand-title'
           >
             <div class='d-flex align-center'>
               <v-icon
@@ -46,7 +50,7 @@
             </div>
           </div>
           <v-expand-transition>
-            <div v-show='filtersExpanded' class='pt-5'>
+            <div v-show='filtersExpanded' class='pt-4'>
               <route-type-select
                 :multiple='true'
                 :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : []'
@@ -215,11 +219,11 @@ export default defineComponent({
 </script>
 
 <style>
-.card-title {
-  max-width: 90%;
+.card-expand-title {
+  width: calc(100% - 40px);
 }
 
 .card-expand-button {
-  max-width: 10%;
+  width: 40px;
 }
 </style>
