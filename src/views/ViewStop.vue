@@ -72,15 +72,19 @@
           <div
             v-if='stopData.routes.length > maxChips'
             @click='routesExpanded = !routesExpanded'
-            role='button'
+            :role='stopData.routes.length > maxChips ? "button" : ""'
             class='card-expand-button float-right pb-1'
           >
             <v-icon
-              :icon='filtersExpanded ? "mdi-menu-up" : "mdi-menu-down"'
+              :icon='routesExpanded ? "mdi-menu-up" : "mdi-menu-down"'
               class='float-right'
             ></v-icon>
           </div>
-          <div :class='stopData.routes.length > maxChips ? "card-expand-title" : "card-title"'>
+          <div
+            @click='routesExpanded = stopData.routes.length > maxChips ? !routesExpanded : routesExpanded'
+            role='button'
+            :class='stopData.routes.length > maxChips ? "card-expand-title" : "card-title"'
+          >
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-routes'
@@ -117,7 +121,11 @@
                 class='float-right'
               ></v-icon>
             </div>
-            <div :class='disruptionsExpanded = !disruptionsExpanded ? "card-expand-title" : "card-title"'>
+            <div
+              @click='disruptionsExpanded = !disruptionsExpanded'
+              role='button'
+              class='card-expand-title'
+            >
               <div class='d-flex align-center'>
                 <v-progress-circular
                   v-if='disruptionsLoading && !disruptionsExpanded'
