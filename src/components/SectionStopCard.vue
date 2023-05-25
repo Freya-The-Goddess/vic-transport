@@ -3,8 +3,7 @@
     class='fill-height pa-3'
   >
     <div
-      class='float-right'
-      :style='xs ? "max-width: 12%" : "max-width: 8%"'
+      class='float-right stop-actions'
     >
       <v-tooltip
         :text='favouriteStop ? "Remove Favourite" : "Add Favourite"'
@@ -17,7 +16,7 @@
             v-bind='props'
             @click='favouriteButton()'
             :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
-            class='text-favourite-yellow'
+            class='text-favourite-yellow float-right'
           ></v-icon>
         </template>
       </v-tooltip>
@@ -25,7 +24,7 @@
       <v-icon
         v-if='disruption'
         icon='mdi-alert-circle'
-        class="text-disruption-orange mt-4"
+        class="text-disruption-orange float-right mt-4"
       ></v-icon>
     </div>
     <router-link
@@ -34,8 +33,7 @@
     >
       <div
         role='button'
-        class='d-flex align-center float-left fill-height'
-        :style='xs ? "width: 88%" : "width: 92%"'
+        class='stop-header d-flex align-center float-left fill-height'
       >
         <v-card
           :color='$root.routeTypes[stop.route_type].route_type_color'
@@ -163,6 +161,14 @@ export default {
 <style>
 .v-tooltip .v-overlay__content {
   background: rgba(var(--v-theme-surface-variant), 1) !important;
+}
+
+.stop-actions {
+  width: 30px
+}
+
+.stop-header {
+  width: calc(100% - 30px)
 }
 
 .route-type-card {
