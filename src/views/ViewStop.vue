@@ -3,25 +3,14 @@
   <v-container v-if='!stopData || stopError'>
     <v-row>
       <v-col>
-        <v-card
+        <loading-card
           v-if='!stopData && !stopError'
-          class='pa-4'
-        >
-          <v-progress-circular
-            indeterminate
-            :size='20'
-            :width='3'
-            class='me-2'
-          ></v-progress-circular>
-          <span class='ms-2'>Loading Stop Data...</span>
-        </v-card>
-        <v-card
-          v-if='stopError'
-          class='pa-4'
-        >
-          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
-          <span class='text-error-text float-left ms-1'>Stop Data Request Error</span>
-        </v-card>
+          text='Loading Stop Data...'
+        ></loading-card>
+        <error-card
+          v-else-if='stopError'
+          text='Stop Data Request Error'
+        ></error-card>
       </v-col>
     </v-row>
   </v-container>
@@ -196,6 +185,8 @@ import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
 // Child components
+import ErrorCard from '../components/SectionErrorCard.vue'
+import LoadingCard from '../components/SectionLoadingCard.vue'
 import DisruptionList from '../components/SectionDisruptionList.vue'
 import RouteChips from '../components/SectionRouteChips.vue'
 
@@ -203,6 +194,8 @@ export default defineComponent({
   name: 'ViewStop',
 
   components: { // Child components
+    ErrorCard,
+    LoadingCard,
     DisruptionList,
     RouteChips
   },

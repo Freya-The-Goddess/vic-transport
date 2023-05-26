@@ -72,31 +72,18 @@
   <v-container v-if='searchLoading || (!searchLoading && !jsonStops.length) || searchError'>
     <v-row>
       <v-col>
-        <v-card
+        <loading-card
           v-if='searchLoading && !searchError'
-          class='pa-4'
-        >
-          <v-progress-circular
-            indeterminate
-            :size='20'
-            :width='3'
-            class='me-2'
-          ></v-progress-circular>
-          <span class='ms-2'>Loading Results...</span>
-        </v-card>
-        <v-card
+          text='Loading Results...'
+        ></loading-card>
+        <error-card
           v-else-if='searchError'
-          class='pa-4'
-        >
-          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
-          <span class='text-error-text float-left ms-1'>Search Request Error</span>
-        </v-card>
-        <v-card
+          text='Search Request Error'
+        ></error-card>
+        <message-card
           v-else-if='!jsonStops.length'
-          class='pa-4'
-        >
-          <span>No Results</span>
-        </v-card>
+          text='No Results'
+        ></message-card>
       </v-col>
     </v-row>
   </v-container>
@@ -115,6 +102,9 @@
 import { defineComponent } from 'vue'
 
 // Child components
+import ErrorCard from '../components/SectionErrorCard.vue'
+import LoadingCard from '../components/SectionLoadingCard.vue'
+import MessageCard from '../components/SectionMessageCard.vue'
 import RouteTypeSelect from '../components/SectionRouteTypeSelect.vue'
 import StopList from '../components/SectionStopList.vue'
 
@@ -122,6 +112,9 @@ export default defineComponent({
   name: 'ViewSearch',
 
   components: { // Child components
+    ErrorCard,
+    LoadingCard,
+    MessageCard,
     RouteTypeSelect,
     StopList
   },

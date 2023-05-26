@@ -61,50 +61,26 @@
   <v-container v-if='searchLoading || !locationPermission || (!searchLoading && !jsonStops.length) || searchError'>
     <v-row>
       <v-col>
-        <v-card
+        <loading-card
           v-if='locationLoading'
-          class='pa-4'
-        >
-          <v-progress-circular
-            indeterminate
-            :size='20'
-            :width='3'
-            class='me-2'
-          ></v-progress-circular>
-          <span class='ms-2'>Loading Current Location...</span>
-        </v-card>
-        <v-card
+          text='Loading Current Location...'
+        ></loading-card>
+        <error-card
           v-else-if='!locationPermission'
-          class='pa-4'
-        >
-          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
-          <span class='text-error-text float-left ms-1'>Location must be enabled for 'Nearby Stops' feature</span>
-        </v-card>
-        <v-card
+          text='Location must be enabled for "Nearby Stops" feature'
+        ></error-card>
+        <loading-card
           v-else-if='searchLoading && locationPermission && !searchError'
-          class='pa-4'
-        >
-          <v-progress-circular
-            indeterminate
-            :size='20'
-            :width='3'
-            class='me-2'
-          ></v-progress-circular>
-          <span class='ms-2'>Loading Neaby Stops...</span>
-        </v-card>
-        <v-card
+          text='Loading Neaby Stops...'
+        ></loading-card>
+        <error-card
           v-else-if='searchError'
-          class='pa-4'
-        >
-          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
-          <span class='text-error-text float-left ms-1'>Nearby Stops Request Error</span>
-        </v-card>
-        <v-card
+          text='Nearby Stops Request Error'
+        ></error-card>
+        <message-card
           v-else-if='!searchLoading && !jsonStops.length'
-          class='pa-4'
-        >
-          <span>No Stops Nearby</span>
-        </v-card>
+          text='No Stops Nearby'
+        ></message-card>
       </v-col>
     </v-row>
   </v-container>
@@ -123,6 +99,9 @@
 import { defineComponent } from 'vue'
 
 // Child components
+import ErrorCard from '../components/SectionErrorCard.vue'
+import LoadingCard from '../components/SectionLoadingCard.vue'
+import MessageCard from '../components/SectionMessageCard.vue'
 import RouteTypeSelect from '../components/SectionRouteTypeSelect.vue'
 import StopList from '../components/SectionStopList.vue'
 
@@ -130,6 +109,9 @@ export default defineComponent({
   name: 'ViewNearby',
 
   components: { // Child components
+    ErrorCard,
+    LoadingCard,
+    MessageCard,
     RouteTypeSelect,
     StopList
   },
