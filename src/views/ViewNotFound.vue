@@ -9,15 +9,18 @@
   <v-container class='pt-2 pb-2'>
     <v-row>
       <v-col>
-        <p>
-          Could not resolve route
-          <span
-            v-for='(chunk, index) in $route.params.pathMatch'
-            :key='index'
-            class='font-weight-bold'
-          >/{{ chunk }}</span>
-          in application.
-        </p>
+        <v-card class='pa-4'>
+          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
+          <span class='text-error-text float-left ms-1'>
+            Could not resolve route
+            <span
+              v-for='(chunk, index) in $route.params.pathMatch'
+              :key='index'
+              class='font-weight-bold'
+            >/{{ chunk }}</span>
+            in application.
+          </span>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>

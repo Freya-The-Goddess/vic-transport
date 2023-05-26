@@ -88,8 +88,8 @@
           v-else-if='searchError'
           class='pa-4'
         >
-          <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
-          <span class='text-error-text font-weight-bold float-left ms-1'>Search Request Error</span>
+          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
+          <span class='text-error-text float-left ms-1'>Search Request Error</span>
         </v-card>
         <v-card
           v-else-if='!jsonStops.length'

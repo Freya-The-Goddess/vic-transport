@@ -77,7 +77,8 @@
           v-else-if='!locationPermission'
           class='pa-4'
         >
-          <span>Location must be enabled for 'Nearby Stops' feature</span>
+          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
+          <span class='text-error-text float-left ms-1'>Location must be enabled for 'Nearby Stops' feature</span>
         </v-card>
         <v-card
           v-else-if='searchLoading && locationPermission && !searchError'
@@ -95,8 +96,8 @@
           v-else-if='searchError'
           class='pa-4'
         >
-          <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
-          <span class='text-error-text font-weight-bold float-left ms-1'>Nearby Stops Request Error</span>
+          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
+          <span class='text-error-text float-left ms-1'>Nearby Stops Request Error</span>
         </v-card>
         <v-card
           v-else-if='!searchLoading && !jsonStops.length'

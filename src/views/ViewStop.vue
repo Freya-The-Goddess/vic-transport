@@ -19,8 +19,8 @@
           v-if='stopError'
           class='pa-4'
         >
-          <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
-          <span class='text-error-text font-weight-bold float-left ms-1'>Stop Data Request Error</span>
+          <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
+          <span class='text-error-text float-left ms-1'>Stop Data Request Error</span>
         </v-card>
       </v-col>
     </v-row>
@@ -157,8 +157,8 @@
                   <span class='ms-2'>Loading Disruptions...</span>
                 </div>
                 <div v-else-if='disruptionsError'>
-                  <v-icon icon='text-error-text mdi-exclamation-thick me-1' class='float-left'></v-icon>
-                  <span class='text-error-text font-weight-bold float-left ms-1'>Disruption Request Error</span>
+                  <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
+                  <span class='text-error-text float-left ms-1'>Disruption Request Error</span>
                 </div>
                 <disruption-list
                   v-else-if='disruptionData.length'
