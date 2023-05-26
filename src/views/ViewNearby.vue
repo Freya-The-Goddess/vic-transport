@@ -1,14 +1,20 @@
 <template>
-  <v-container>
+  <v-container class='pb-2'>
     <v-row>
       <v-col>
         <h2>Nearby Stops</h2>
       </v-col>
     </v-row>
+  </v-container>
+  <!-- Search Inputs -->
+  <v-container
+    v-if='locationPermission'
+    class='pt-2 pb-2'
+  >
     <!-- Search Filters -->
     <v-row>
       <v-col>
-        <v-card class='pa-3'>
+        <v-card class='pa-3 pb-2'>
           <div
             @click='filtersExpanded = !filtersExpanded'
             role='button'
@@ -27,28 +33,33 @@
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-filter'
+                size='small'
                 class='d-inline-block fill-height'
               ></v-icon>
-              <h3 class='d-inline-block fill-height ms-2'>
+              <span class='d-inline-block fill-height ms-2'>
                 Search Filters
                 <span v-if='totalFilters'>({{ totalFilters }})</span>
-              </h3>
+              </span>
             </div>
           </div>
-          <v-expand-transition>
-            <div v-show='filtersExpanded' class='pt-4'>
-              <route-type-select
-                :multiple='true'
-                :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : []'
-                @selected-route-types='getRouteTypes'
-              ></route-type-select>
-            </div>
-          </v-expand-transition>
+          <div class='pt-1'>
+            <v-expand-transition>
+              <div v-show='filtersExpanded' class='pt-3 pb-2'>
+                <route-type-select
+                  :multiple='true'
+                  :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : []'
+                  @selected-route-types='getRouteTypes'
+                ></route-type-select>
+              </div>
+            </v-expand-transition>
+          </div>
         </v-card>
       </v-col>
     </v-row>
-    <!-- Loading and Error Cards -->
-    <v-row v-if='searchLoading || !locationPermission || (!searchLoading && !jsonStops.length) || searchError'>
+  </v-container>
+  <!-- Loading and Error Cards -->
+  <v-container v-if='searchLoading || !locationPermission || (!searchLoading && !jsonStops.length) || searchError'>
+    <v-row>
       <v-col>
         <v-card
           v-if='locationLoading'
@@ -95,7 +106,12 @@
         </v-card>
       </v-col>
     </v-row>
-    <!-- Search Results -->
+  </v-container>
+  <!-- Search Results -->
+  <v-container
+    v-if='jsonStops.length'
+    class='mt-1'
+  >
     <stop-list
       :stop-list='jsonStops'
     ></stop-list>

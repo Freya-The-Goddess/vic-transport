@@ -1,14 +1,17 @@
 <template>
-  <v-container>
+  <v-container class='pb-2'>
     <v-row>
       <v-col>
         <h2>Routes</h2>
       </v-col>
     </v-row>
+  </v-container>
+  <!-- Search Inputs -->
+  <v-container class='pt-2 pb-2'>
     <!-- Search Filters -->
     <v-row>
       <v-col>
-        <v-card class='pa-3'>
+        <v-card class='pa-3 pb-2'>
           <div
             @click='filtersExpanded = !filtersExpanded'
             role='button'
@@ -27,20 +30,26 @@
             <div class='d-flex align-center'>
               <v-icon
                 icon='mdi-filter'
+                size='small'
                 class='d-inline-block fill-height'
               ></v-icon>
-              <h3 class='d-inline-block fill-height ms-2'>Search Filters</h3>
+              <span class='d-inline-block fill-height ms-2'>
+                Search Filters
+                <span v-if='totalFilters'>({{ totalFilters }})</span>
+              </span>
             </div>
           </div>
-          <v-expand-transition>
-            <div v-show='filtersExpanded' class='pt-4'>
-              <route-type-select
-                :multiple='false'
-                :select-route-types='["0"]'
-                @selected-route-types='getRouteTypes'
-              ></route-type-select>
-            </div>
-          </v-expand-transition>
+          <div class='pt-1'>
+            <v-expand-transition>
+              <div v-show='filtersExpanded' class='pt-3 pb-2'>
+                <route-type-select
+                  :multiple='false'
+                  :select-route-types='["0"]'
+                  @selected-route-types='getRouteTypes'
+                ></route-type-select>
+              </div>
+            </v-expand-transition>
+          </div>
         </v-card>
       </v-col>
     </v-row>
