@@ -6,19 +6,94 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-container class='pt-2 pb-2'>
+  <!-- Loading and Error Cards -->
+  <v-container class='pt-2 pb-2' v-if='favLoading || favError || (!favLoading && !jsonStops.length)'>
     <v-row>
       <v-col>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <loading-card
+          v-if='favLoading'
+          text='Loading Favourite Stops...'
+        ></loading-card>
+        <error-card
+          v-else-if='favError'
+          text='Favourite Stops Request Error'
+        ></error-card>
+        <message-card
+          v-else-if='!favLoading && !jsonStops.length'
+          text='No Favourite Stops'
+        ></message-card>
       </v-col>
     </v-row>
+  </v-container>
+  <!-- Search Results -->
+  <v-container
+    v-if='jsonStops.length'
+    class='mt-0'
+  >
+    <stop-list
+      :stop-list='jsonStops'
+    ></stop-list>
   </v-container>
 </template>
 
 <script scoped>
 import { defineComponent } from 'vue'
 
+// Child components
+import ErrorCard from '../components/SectionErrorCard.vue'
+import LoadingCard from '../components/SectionLoadingCard.vue'
+import MessageCard from '../components/SectionMessageCard.vue'
+import StopList from '../components/SectionStopList.vue'
+
 export default defineComponent({
-  name: 'ViewFavourites'
+  name: 'ViewFavourites',
+
+  components: { // Child components
+    ErrorCard,
+    LoadingCard,
+    MessageCard,
+    StopList
+  },
+
+  data: function () { // Default data
+    return {
+      jsonStops: [],
+      favError: '',
+      favLoading: false
+    }
+  },
+
+  mounted: function () {
+    this.favSearch()
+  },
+
+  methods: {
+    favSearch: function () {
+      this.favError = false
+      if (this.$store.state.favouriteStops.length) {
+        this.favLoading = true
+        this.$store.state.favouriteStops.forEach((favStop) => {
+          this.getStopRequest(favStop.stopId, favStop.routeType)
+        })
+      } else {
+        this.favLoading = false
+      }
+    },
+
+    // Query API for stop data
+    getStopRequest: function (stopId, routeType) {
+      const request = `/v3/stops/${stopId}/route_type/${routeType}`
+      this.$root.ptvApiRequest(request)
+        .then((data) => {
+          this.jsonStops.push(data.stop)
+          this.favLoading = false
+          this.favError = false
+        })
+        .catch((error) => {
+          this.favError = true
+          console.log(error)
+        })
+    }
+  }
 })
 </script>
