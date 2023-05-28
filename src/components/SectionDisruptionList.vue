@@ -44,7 +44,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .disruption-icon {
   opacity: 1 !important;
 }

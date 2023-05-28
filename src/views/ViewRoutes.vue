@@ -85,7 +85,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .card-expand-title {
   width: calc(100% - 40px);
 }

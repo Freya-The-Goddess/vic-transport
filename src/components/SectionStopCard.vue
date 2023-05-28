@@ -158,7 +158,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .v-tooltip .v-overlay__content {
   background: rgba(var(--v-theme-surface-variant), 1) !important;
 }
