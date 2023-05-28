@@ -268,7 +268,7 @@ export default defineComponent({
           if (this.stopData.routes.length < this.maxChips) {
             this.routesExpanded = true
           }
-          this.searchError = false
+          this.stopError = false
         })
         .catch((error) => {
           this.stopError = true
