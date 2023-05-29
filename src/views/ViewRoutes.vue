@@ -44,7 +44,7 @@
               <div v-show='filtersExpanded' class='pt-3 pb-2'>
                 <route-type-select
                   :multiple='false'
-                  :select-route-types='["0"]'
+                  :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : ["0"]'
                   @selected-route-types='getRouteTypes'
                 ></route-type-select>
               </div>
@@ -54,32 +54,162 @@
       </v-col>
     </v-row>
   </v-container>
+  <!-- Search Loading and Error Cards -->
+  <v-container v-if='routesLoading || (!routesLoading && !jsonRoutes.length) || routesError'>
+    <v-row>
+      <v-col>
+        <loading-card
+          v-if='routesLoading && !routesError'
+          text='Loading Routes...'
+        ></loading-card>
+        <error-card
+          v-else-if='routesError'
+          text='Routes Request Error'
+        ></error-card>
+        <message-card
+          v-else-if='!routesLoading && !jsonRoutes.length'
+          text='No Routes Found'
+        ></message-card>
+      </v-col>
+    </v-row>
+  </v-container>
+  <!-- Search Results -->
+  <v-container
+    v-if='jsonRoutes.length'
+    class='mt-1'
+  >
+    <route-list
+      :route-list='sortedRoutes'
+    ></route-list>
+  </v-container>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 
-// Components
+// Child components
+import ErrorCard from '../components/SectionErrorCard.vue'
+import LoadingCard from '../components/SectionLoadingCard.vue'
+import MessageCard from '../components/SectionMessageCard.vue'
 import RouteTypeSelect from '../components/SectionRouteTypeSelect.vue'
+import RouteList from '../components/SectionRouteList.vue'
 
 export default defineComponent({
   name: 'ViewFavourites',
 
   components: { // Child components
-    RouteTypeSelect
+    ErrorCard,
+    LoadingCard,
+    MessageCard,
+    RouteTypeSelect,
+    RouteList
   },
 
   data: function () { // Default data
     return {
-      routeType: '',
+      routesLoading: true,
+      routesError: false,
+      jsonRoutes: [],
+      filterRouteTypes: ['0'],
       filtersExpanded: false
     }
   },
 
+  computed: {
+    totalFilters: function () {
+      let total = 0
+      if (this.filterRouteTypes.length) { total += 1 }
+      return total
+    },
+
+    // Sort routes list
+    sortedRoutes: function () {
+      if (this.filterRouteTypes[0] === '2') { // Don't sort bus routes
+        return this.jsonRoutes
+      } else {
+        return this.jsonRoutes.toSorted((a, b) => { // Sort route numbers chronologically and route names alphabetically
+          if (a.route_number && b.route_number) {
+            if (a.route_number.includes('combined') && !b.route_number.includes('combined')) {
+              return 1 // b before a
+            } else if (!a.route_number.includes('combined') && b.route_number.includes('combined')) {
+              return -1 // a before b
+            } else {
+              return a.route_number.split('-')[0].replace(/\D/g, '') - b.route_number.split('-')[0].replace(/\D/g, '')
+            }
+          } else if (a.route_number && !b.route_number) {
+            return -1 // a before b
+          } else if (!a.route_number && b.route_number) {
+            return 1 // b before a
+          } else {
+            return a.route_name < b.route_name ? -1 : 1
+          }
+        })
+      }
+    }
+  },
+
+  created: function () {
+    // Mount debounced search function
+    this.debouncedRoutesRequest = this.debounce(500, function () {
+      this.routesSearch()
+    })
+  },
+
+  mounted: function () {
+    if (this.$route.query.rt) this.filterRouteTypes = this.$route.query.rt.split(' ') // Get route types from URL params
+    this.debouncedRoutesRequest()
+  },
+
   methods: {
+    // Push queries to route, and run request to API
+    routesSearch: function () {
+      this.routesLoading = true
+      this.routesError = false
+      this.jsonRoutes = []
+      const urlPath = '/routes'
+      const urlQuery = {}
+      if (this.filterRouteTypes.length) urlQuery.rt = this.filterRouteTypes.toString().replaceAll(/,/g, ' ')
+      if (this.$route.path === urlPath) { // prevents bouncing if path changes
+        this.$router.push({ // Push new query to URL
+          path: urlPath,
+          query: urlQuery
+        })
+      }
+      this.routesRequest() // Run API request
+    },
+
+    // Query API for routes
+    routesRequest: function () {
+      let request = '/v3/routes'
+      this.filterRouteTypes.forEach(function (routeType) {
+        request += request.includes('?') ? '&' : '?'
+        request += 'route_types=' + routeType
+      })
+      this.$root.ptvApiRequest(request)
+        .then((data) => {
+          this.jsonRoutes = data.routes
+          this.routesError = false
+          this.routesLoading = false
+        })
+        .catch((error) => {
+          this.routesError = true
+          console.log(error)
+        })
+    },
+
     // Get route types callback for child component $emit event
     getRouteTypes: function (value) {
-      this.routeType = value[0]
+      this.filterRouteTypes = value
+      this.debouncedRoutesRequest()
+    },
+
+    // Debounce function for inputs
+    debounce: function (timeout, func) {
+      let timer
+      return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+      }
     }
   }
 })
