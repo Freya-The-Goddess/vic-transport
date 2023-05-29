@@ -9,6 +9,7 @@
   <!-- Loading and Error Cards -->
   <v-container
     v-if='favLoading || favError || (!favLoading && !favStops.length)'
+    class='pt-2 pb-2'
   >
     <v-row>
       <v-col>
@@ -30,7 +31,7 @@
   <!-- Search Results -->
   <v-container
     v-if='favStops.length'
-    class='mt-0'
+    class='pt-3 pb-2'
   >
     <stop-list
       :stop-list='favStops'
