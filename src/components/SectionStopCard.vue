@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class='fill-height pa-3'
+    class='stop-card fill-height pa-3'
   >
     <div
       class='float-right stop-actions'
@@ -161,6 +161,10 @@ export default {
 <style scoped>
 .v-tooltip .v-overlay__content {
   background: rgba(var(--v-theme-surface-variant), 1) !important;
+}
+
+.stop-card {
+  min-height: 90px;
 }
 
 .stop-actions {
