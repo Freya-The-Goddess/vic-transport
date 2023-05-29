@@ -76,19 +76,19 @@
     </v-row>
   </v-container>
   <!-- Search Loading and Error Cards -->
-  <v-container v-if='locationPermission && (searchLoading || (!searchLoading && !jsonStops.length) || searchError)'>
+  <v-container v-if='locationPermission && (nearbyLoading || (!nearbyLoading && !jsonStops.length) || nearbyError)'>
     <v-row>
       <v-col>
         <loading-card
-          v-if='searchLoading && !searchError'
+          v-if='nearbyLoading && !nearbyError'
           text='Loading Neaby Stops...'
         ></loading-card>
         <error-card
-          v-else-if='searchError'
+          v-else-if='nearbyError'
           text='Nearby Stops Request Error'
         ></error-card>
         <message-card
-          v-else-if='!searchLoading && !jsonStops.length'
+          v-else-if='!nearbyLoading && !jsonStops.length'
           text='No Stops Nearby'
         ></message-card>
       </v-col>
@@ -131,8 +131,8 @@ export default defineComponent({
       locationLoading: true,
       locationPermission: false,
       location: { lat: 0, long: 0 },
-      searchLoading: true,
-      searchError: false,
+      nearbyLoading: true,
+      nearbyError: false,
       jsonStops: [],
       filterRouteTypes: [],
       filtersExpanded: false
@@ -149,7 +149,7 @@ export default defineComponent({
 
   created: function () {
     // Mount debounced search function
-    this.debouncedRequest = this.debounce(500, function () {
+    this.debouncedNearbyRequest = this.debounce(500, function () {
       this.locationSearch()
     })
   },
@@ -161,13 +161,14 @@ export default defineComponent({
   },
 
   methods: {
+    // Get location from browser
     getLocation: function () {
       navigator.geolocation.getCurrentPosition(
         (position) => { // location permission granted
           this.locationLoading = false
           this.locationPermission = true
           this.location = { lat: position.coords.latitude, long: position.coords.longitude }
-          this.debouncedRequest()
+          this.debouncedNearbyRequest()
         },
         () => { // location permission not granted
           this.locationLoading = false
@@ -175,16 +176,17 @@ export default defineComponent({
         })
     },
 
+    // Push queries to route, and run request to API
     locationSearch: function () {
-      if (this.location.lat && this.location.long) { this.searchLoading = true }
-      this.searchError = false
+      if (this.location.lat && this.location.long) { this.nearbyLoading = true }
+      this.nearbyError = false
       this.jsonStops = []
       const urlPath = '/nearby'
       const urlQuery = {}
       if (this.filterRouteTypes.length) { urlQuery.rt = this.filterRouteTypes.toString().replaceAll(/,/g, ' ') }
       // TODO: add distance filter to query
       if (this.$route.path === urlPath) { // prevents bouncing if path changes
-        this.$router.push({ // Push new search query to URL
+        this.$router.push({ // Push new query to URL
           path: urlPath,
           query: urlQuery
         })
@@ -203,11 +205,11 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonStops = data.stops.toSorted(function (a, b) { return a.route_type - b.route_type })
-          this.searchError = false
-          this.searchLoading = false
+          this.nearbyError = false
+          this.nearbyLoading = false
         })
         .catch((error) => {
-          this.searchError = true
+          this.nearbyError = true
           console.log(error)
         })
     },
@@ -215,10 +217,10 @@ export default defineComponent({
     // Get route types callback for child component $emit event
     getRouteTypes: function (value) {
       this.filterRouteTypes = value
-      this.debouncedRequest()
+      this.debouncedNearbyRequest()
     },
 
-    // Debounce function for search input
+    // Debounce function for inputs
     debounce: function (timeout, func) {
       let timer
       return (...args) => {
