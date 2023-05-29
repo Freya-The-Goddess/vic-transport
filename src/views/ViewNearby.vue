@@ -6,6 +6,24 @@
       </v-col>
     </v-row>
   </v-container>
+  <!-- Location Loading and Error Cards -->
+  <v-container
+    v-if='locationLoading || !locationPermission'
+    class='pt-2 pb-2'
+  >
+    <v-row>
+      <v-col>
+        <loading-card
+          v-if='locationLoading'
+          text='Loading Current Location...'
+        ></loading-card>
+        <error-card
+          v-else-if='!locationPermission'
+          text='Location must be enabled for "Nearby Stops" feature'
+        ></error-card>
+      </v-col>
+    </v-row>
+  </v-container>
   <!-- Search Inputs -->
   <v-container
     v-if='locationPermission'
@@ -57,20 +75,12 @@
       </v-col>
     </v-row>
   </v-container>
-  <!-- Loading and Error Cards -->
-  <v-container v-if='searchLoading || !locationPermission || (!searchLoading && !jsonStops.length) || searchError'>
+  <!-- Search Loading and Error Cards -->
+  <v-container v-if='locationPermission && (searchLoading || (!searchLoading && !jsonStops.length) || searchError)'>
     <v-row>
       <v-col>
         <loading-card
-          v-if='locationLoading'
-          text='Loading Current Location...'
-        ></loading-card>
-        <error-card
-          v-else-if='!locationPermission'
-          text='Location must be enabled for "Nearby Stops" feature'
-        ></error-card>
-        <loading-card
-          v-else-if='searchLoading && locationPermission && !searchError'
+          v-if='searchLoading && !searchError'
           text='Loading Neaby Stops...'
         ></loading-card>
         <error-card
