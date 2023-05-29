@@ -11,7 +11,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "favourites" */ '../views/ViewFavourites.vue')
   },
   {
-    path: '/routes/:routeType?',
+    path: '/routes',
     name: 'routes',
     component: () => import(/* webpackChunkName: "routes" */ '../views/ViewRoutes.vue')
   },
