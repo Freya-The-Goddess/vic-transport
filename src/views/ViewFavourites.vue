@@ -7,7 +7,9 @@
     </v-row>
   </v-container>
   <!-- Loading and Error Cards -->
-  <v-container class='pt-2 pb-2' v-if='favLoading || favError || (!favLoading && !jsonStops.length)'>
+  <v-container
+    v-if='favLoading || favError || (!favLoading && !favStops.length)'
+  >
     <v-row>
       <v-col>
         <loading-card
@@ -19,7 +21,7 @@
           text='Favourite Stops Request Error'
         ></error-card>
         <message-card
-          v-else-if='!favLoading && !jsonStops.length'
+          v-else-if='!favLoading && !favStops.length'
           text='No Favourite Stops'
         ></message-card>
       </v-col>
@@ -27,11 +29,11 @@
   </v-container>
   <!-- Search Results -->
   <v-container
-    v-if='jsonStops.length'
+    v-if='favStops.length'
     class='mt-0'
   >
     <stop-list
-      :stop-list='jsonStops'
+      :stop-list='favStops'
     ></stop-list>
   </v-container>
 </template>
@@ -58,8 +60,24 @@ export default defineComponent({
   data: function () { // Default data
     return {
       jsonStops: [],
+      favStops: [],
       favError: '',
       favLoading: false
+    }
+  },
+
+  watch: {
+    jsonStops: {
+      handler: function () {
+        if (this.$store.state.favouriteStops.length === this.jsonStops.length) {
+          this.favLoading = false
+          this.favError = false
+          this.favStops = this.sortFavStops()
+        } else {
+          this.favStops = []
+        }
+      },
+      deep: true
     }
   },
 
@@ -68,6 +86,18 @@ export default defineComponent({
   },
 
   methods: {
+    // Sort favourite stops list by route type
+    sortFavStops: function () {
+      return this.jsonStops.toSorted((a, b) => {
+        if (a.route_type === b.route_type) {
+          return a.stop_name < b.stop_name ? -1 : 1
+        } else {
+          return a.route_type - b.route_type
+        }
+      })
+    },
+
+    // Get favourites and run API request
     favSearch: function () {
       this.favError = false
       if (this.$store.state.favouriteStops.length) {
@@ -86,10 +116,9 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonStops.push(data.stop)
-          this.favLoading = false
-          this.favError = false
         })
         .catch((error) => {
+          this.favLoading = false
           this.favError = true
           console.log(error)
         })
