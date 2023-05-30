@@ -78,7 +78,7 @@
         ></loading-card>
         <error-card
           v-else-if='searchError'
-          text='Search Request Error'
+          :text='searchError'
         ></error-card>
         <message-card
           v-else-if='!jsonStops.length'
@@ -197,12 +197,12 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonStops = data.stops.toSorted(function (a, b) { return a.route_type - b.route_type })
-          this.searchError = false
           this.searchLoading = false
+          this.searchError = ''
         })
         .catch((error) => {
-          this.searchError = true
-          console.log(error)
+          this.searchLoading = false
+          this.searchError = error.message
         })
     },
 

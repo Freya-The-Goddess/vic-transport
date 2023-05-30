@@ -58,10 +58,10 @@ export default {
           .done(function (requestUrl) {
             resolve(requestUrl)
           })
-          .fail(function (xhr, status, error) {
-            const errorMessage = 'An AJAX error occured attempting to access get-request-url.php. \nStatus: ' + status + '\nError: ' + error
-            console.log(errorMessage)
-            reject(errorMessage)
+          .fail(function () {
+            const errorMessage = 'An AJAX error occured attempting to access get-request-url.php.'
+            console.error(errorMessage)
+            reject(new Error(errorMessage))
           })
       })
     },
@@ -78,18 +78,19 @@ export default {
                 if (data.status.health === 1) {
                   resolve(data)
                 } else {
-                  console.log('PTV API health check failed')
-                  reject(new Error('Health Check Failed'))
+                  const errorMessage = 'PTV API health check failed.'
+                  console.error(errorMessage)
+                  reject(new Error(errorMessage))
                 }
               })
-              .fail(function (xhr, status, error) {
-                const errorMessage = 'An AJAX error occured attempting to access PTV API. \nStatus: ' + status + '\nError: ' + error
-                console.log(errorMessage)
-                reject(errorMessage)
+              .fail(function () {
+                const errorMessage = 'An AJAX error occured attempting to access PTV API.'
+                console.error(errorMessage)
+                reject(new Error(errorMessage))
               })
           })
-          .catch((errorMessage) => {
-            reject(errorMessage)
+          .catch((error) => {
+            reject(new Error(error.message))
           })
       })
     }

@@ -85,7 +85,7 @@
         ></loading-card>
         <error-card
           v-else-if='nearbyError'
-          text='Nearby Stops Request Error'
+          :text='nearbyError'
         ></error-card>
         <message-card
           v-else-if='!nearbyLoading && !jsonStops.length'
@@ -132,7 +132,7 @@ export default defineComponent({
       locationPermission: false,
       location: { lat: 0, long: 0 },
       nearbyLoading: true,
-      nearbyError: false,
+      nearbyError: '',
       jsonStops: [],
       filterRouteTypes: [],
       filtersExpanded: false
@@ -179,7 +179,7 @@ export default defineComponent({
     // Push queries to route, and run request to API
     locationSearch: function () {
       if (this.location.lat && this.location.long) { this.nearbyLoading = true }
-      this.nearbyError = false
+      this.nearbyError = ''
       this.jsonStops = []
       const urlPath = '/nearby'
       const urlQuery = {}
@@ -205,12 +205,12 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonStops = data.stops.toSorted(function (a, b) { return a.route_type - b.route_type })
-          this.nearbyError = false
           this.nearbyLoading = false
+          this.nearbyError = ''
         })
         .catch((error) => {
-          this.nearbyError = true
-          console.log(error)
+          this.nearbyLoading = false
+          this.nearbyError = error.message
         })
     },
 

@@ -9,7 +9,7 @@
         ></loading-card>
         <error-card
           v-else-if='stopError'
-          text='Stop Data Request Error'
+          :text='stopError'
         ></error-card>
       </v-col>
     </v-row>
@@ -147,7 +147,7 @@
                 </div>
                 <div v-else-if='disruptionsError'>
                   <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
-                  <span class='text-error-text float-left ms-1'>Disruption Request Error</span>
+                  <span class='text-error-text float-left ms-1'><span class='font-weight-bold'>Error:</span> {{ disruptionError }}</span>
                 </div>
                 <disruption-list
                   v-else-if='disruptionData.length'
@@ -208,7 +208,7 @@ export default defineComponent({
   data: function () { // Default data
     return {
       stopData: '',
-      stopError: false,
+      stopError: '',
       disruptionData: [],
       disruptionsLoading: false,
       disruptionsExpanded: false,
@@ -268,11 +268,10 @@ export default defineComponent({
           if (this.stopData.routes.length < this.maxChips) {
             this.routesExpanded = true
           }
-          this.stopError = false
+          this.stopError = ''
         })
         .catch((error) => {
-          this.stopError = true
-          console.log(error)
+          this.stopError = error.message
         })
     },
 
@@ -292,12 +291,11 @@ export default defineComponent({
           })
           this.disruptionData = disruptions
           this.disruptionLoading = false
-          this.disruptionError = false
+          this.disruptionError = ''
         })
         .catch((error) => {
           this.disruptionLoading = false
-          this.disruptionError = true
-          console.log(error)
+          this.disruptionError = error.message
         })
     },
 

@@ -64,7 +64,7 @@
         ></loading-card>
         <error-card
           v-else-if='routesError'
-          text='Routes Request Error'
+          :text='routesError'
         ></error-card>
         <message-card
           v-else-if='!routesLoading && !jsonRoutes.length'
@@ -108,7 +108,7 @@ export default defineComponent({
   data: function () { // Default data
     return {
       routesLoading: true,
-      routesError: false,
+      routesError: '',
       jsonRoutes: [],
       filterRouteTypes: ['0'],
       filtersExpanded: false
@@ -164,7 +164,7 @@ export default defineComponent({
     // Push queries to route, and run request to API
     routesSearch: function () {
       this.routesLoading = true
-      this.routesError = false
+      this.routesError = ''
       this.jsonRoutes = []
       const urlPath = '/routes'
       const urlQuery = {}
@@ -188,12 +188,12 @@ export default defineComponent({
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.jsonRoutes = data.routes
-          this.routesError = false
           this.routesLoading = false
+          this.routesError = ''
         })
         .catch((error) => {
-          this.routesError = true
-          console.log(error)
+          this.routesLoading = false
+          this.routesError = error.message
         })
     },
 

@@ -19,7 +19,7 @@
         ></loading-card>
         <error-card
           v-else-if='favError'
-          text='Favourite Stops Request Error'
+          :text='favError'
         ></error-card>
         <message-card
           v-else-if='!favLoading && !favStops.length'
@@ -72,7 +72,7 @@ export default defineComponent({
       handler: function () {
         if (this.$store.state.favouriteStops.length === this.jsonStops.length) {
           this.favLoading = false
-          this.favError = false
+          this.favError = ''
           this.favStops = this.sortFavStops()
         } else {
           this.favStops = []
@@ -100,7 +100,7 @@ export default defineComponent({
 
     // Get favourites and run API request
     favSearch: function () {
-      this.favError = false
+      this.favError = ''
       if (this.$store.state.favouriteStops.length) {
         this.favLoading = true
         this.$store.state.favouriteStops.forEach((favStop) => {
@@ -120,8 +120,7 @@ export default defineComponent({
         })
         .catch((error) => {
           this.favLoading = false
-          this.favError = true
-          console.log(error)
+          this.favError = error.message
         })
     }
   }
