@@ -4,11 +4,12 @@
       v-for='(n,routeType) in 4'
       :key='routeType'
       cols='3'
+      class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
     >
       <v-btn
         :color='$root.routeTypes[routeType].route_type_color + (routeTypeSelected(routeType.toString()) ? "" : "-dim")'
         @click='selectRouteType(routeType.toString())'
-        class='text-over-color rounded-xl w-100 h-100 pt-2 pb-2 pt-md-1 pb-md-1'
+        class='route-type-button text-over-color rounded-xl pt-2 pb-2 pt-md-1 pb-md-1'
       >
         <div class='d-flex flex-column flex-md-row align-center'>
           <div class='mb-1 mb-md-0 me-md-2'>
@@ -90,3 +91,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.route-type-button {
+  min-width: 0;
+  height: 100% !important;
+  width: 100% !important;
+}
+</style>

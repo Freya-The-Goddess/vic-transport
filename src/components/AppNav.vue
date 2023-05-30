@@ -2,7 +2,10 @@
   <div id='app-nav' class='bg-header-footer-grey'>
     <v-container>
       <v-row>
-        <v-col cols='3'>
+        <v-col
+          cols='3'
+          class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
+        >
           <router-link
             to='/favourites'
             custom
@@ -11,7 +14,7 @@
             <v-btn
               @click='navigate'
               :color='$route.name === "favourites" ? "nav-button-selected" : "nav-button"'
-              class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
+              class='nav-button text-over-color rounded-xl pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
                 <div class='mb-1 mb-md-0 me-md-2'>
@@ -24,7 +27,10 @@
             </v-btn>
           </router-link>
         </v-col>
-        <v-col cols='3'>
+        <v-col
+          cols='3'
+          class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
+        >
           <router-link
             to='/routes'
             custom
@@ -33,7 +39,7 @@
             <v-btn
               @click='navigate'
               :color='$route.name === "routes" ? "nav-button-selected" : "nav-button"'
-              class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
+              class='nav-button text-over-color rounded-xl pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
                 <div class='mb-1 mb-md-0 me-md-2'>
@@ -45,7 +51,10 @@
             </v-btn>
           </router-link>
         </v-col>
-        <v-col cols='3'>
+        <v-col
+          cols='3'
+          class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
+        >
           <router-link
             to='/nearby'
             custom
@@ -54,7 +63,7 @@
             <v-btn
               @click='navigate'
               :color='$route.name === "nearby" ? "nav-button-selected" : "nav-button"'
-              class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
+              class='nav-button text-over-color rounded-xl pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
                 <div class='mb-1 mb-md-0 me-md-2'>
@@ -66,7 +75,10 @@
             </v-btn>
           </router-link>
         </v-col>
-        <v-col cols='3'>
+        <v-col
+          cols='3'
+          class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
+        >
           <router-link
             to='/search'
             custom
@@ -75,7 +87,7 @@
             <v-btn
               @click='navigate'
               :color='$route.name === "search" || $route.name === "advancedSearch" ? "nav-button-selected" : "nav-button"'
-              class='text-over-color rounded-xl w-100 h-100 pt-1 pb-2 pb-md-1'
+              class='nav-button text-over-color rounded-xl pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
                 <div class='mb-1 mb-md-0 me-md-2'>
@@ -97,3 +109,11 @@ export default {
   name: 'AppNav'
 }
 </script>
+
+<style scoped>
+.nav-button {
+  min-width: 0;
+  height: 100% !important;
+  width: 100% !important;
+}
+</style>
