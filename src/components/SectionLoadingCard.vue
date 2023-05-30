@@ -1,12 +1,15 @@
 <template>
-  <v-card class='pa-4'>
-    <v-progress-circular
-      indeterminate
-      :size='20'
-      :width='3'
-      class='me-2'
-    ></v-progress-circular>
-    <span class='ms-2'>{{ text }}</span>
+  <v-card class='d-flex align-center pa-4'>
+    <div class='card-icon fill-height'>
+      <v-progress-circular
+        indeterminate
+        :size='20'
+        :width='3'
+      ></v-progress-circular>
+    </div>
+    <div class='card-text'>
+      {{ text }}
+    </div>
   </v-card>
 </template>
 
@@ -19,3 +22,13 @@ export default {
   ]
 }
 </script>
+
+<style scoped>
+.card-icon {
+  width: 35px;
+}
+
+.card-text {
+  width: calc(100% - 35px);
+}
+</style>
