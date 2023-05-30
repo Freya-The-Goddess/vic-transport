@@ -6,7 +6,8 @@ const store = createStore({
   state () {
     return {
       favouriteStops: [],
-      theme: ''
+      theme: '',
+      perPage: 10
     }
   },
 
@@ -18,10 +19,13 @@ const store = createStore({
       if (favourites) state.favouriteStops = JSON.parse(favourites)
 
       // Get theme from local storage
-      const theme = localStorage.getItem('theme')
-      state.theme = theme ?? 'dark'
+      state.theme = localStorage.getItem('theme') ?? 'dark'
       useTheme().global.name.value = state.theme
       localStorage.setItem('theme', state.theme)
+
+      // Get items per page from local storage
+      state.perPage = localStorage.getItem('perPage') ?? 10
+      localStorage.setItem('perPage', state.perPage)
     },
 
     // Add stop to favourite stops
@@ -47,6 +51,12 @@ const store = createStore({
       state.theme = theme
       useTheme().global.name.value = state.theme
       localStorage.setItem('theme', state.theme)
+    },
+
+    // Change items per page
+    changePerPage: function (state, perPage) {
+      state.perPage = perPage
+      localStorage.setItem('perPage', state.perPage)
     }
   }
 })

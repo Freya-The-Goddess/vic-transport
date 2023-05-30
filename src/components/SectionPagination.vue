@@ -56,6 +56,7 @@ export default {
 
     itemsPerPage: function () {
       this.currentPage = 1
+      this.$store.commit('changePerPage', this.itemsPerPage)
       this.calcTotalPages()
       this.$emit('itemsPerPage', this.itemsPerPage)
     },
@@ -70,6 +71,7 @@ export default {
   },
 
   mounted: function () {
+    this.itemsPerPage = this.$store.state.perPage
     this.calcTotalPages()
   },
 
