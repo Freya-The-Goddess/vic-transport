@@ -19,7 +19,8 @@
         ></loading-card>
         <error-card
           v-else-if='!locationPermission'
-          text='Location must be enabled for "Nearby Stops" feature'
+          :warning = 'true'
+          :text='locationError'
         ></error-card>
       </v-col>
     </v-row>
@@ -128,6 +129,7 @@ export default defineComponent({
 
   data: function () { // Default data
     return {
+      locationError: '',
       locationLoading: true,
       locationPermission: false,
       location: { lat: 0, long: 0 },
@@ -167,10 +169,14 @@ export default defineComponent({
         (position) => { // location permission granted
           this.locationLoading = false
           this.locationPermission = true
+          this.locationError = ''
           this.location = { lat: position.coords.latitude, long: position.coords.longitude }
           this.debouncedNearbyRequest()
         },
         () => { // location permission not granted
+          const warningMessage = 'Location must be enabled for "Nearby Stops" feature'
+          console.warn(warningMessage)
+          this.locationError = warningMessage
           this.locationLoading = false
           this.locationPermission = false
         })
