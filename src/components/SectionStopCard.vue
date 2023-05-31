@@ -55,7 +55,6 @@
             :truncate-chips='true'
             :selectable='false'
             :expandable='false'
-            class='pt-2'
           ></route-chips>
         </div>
       </div>
@@ -162,7 +161,7 @@ export default {
 }
 
 .stop-card {
-  min-height: 100px;
+  min-height: 95px;
 }
 
 .stop-actions {
