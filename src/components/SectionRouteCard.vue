@@ -3,27 +3,12 @@
     class='route-card fill-height pa-3'
   >
     <div
-      class='float-right route-actions'
+      class='route-actions float-right'
     >
-      <v-tooltip
-        text='Good Service'
-        location='start'
-        open-delay='1200'
-        content-class='text-caption pt-1 pb-1 ps-2 pe-2'
-      >
-        <template v-slot:activator="{ props }">
-          <v-icon
-            v-bind='props'
-            icon='mdi-star-outline'
-            class='float-right'
-          ></v-icon>
-        </template>
-      </v-tooltip>
-      <br>
       <v-icon
         v-if='disruption'
         icon='mdi-alert-circle'
-        class="text-disruption-orange float-right mt-4"
+        class="text-disruption-orange float-right"
       ></v-icon>
     </div>
     <router-link
@@ -48,6 +33,15 @@
         <div class='align-top fill-height'>
           <span v-if='route.route_number' class='font-weight-bold text-break'>{{ route.route_number }} - </span>
           <span class='font-weight-bold text-break'>{{ route.route_name }}</span><br>
+          <div>
+            <v-icon
+              :icon='statusIcon.icon'
+              :class='"text-"+statusIcon.color'
+              size='x-small'
+              class='me-1'
+            ></v-icon>
+            <span class='text-caption'>{{ route.route_service_status.description }}</span>
+          </div>
         </div>
       </div>
     </router-link>
@@ -73,6 +67,27 @@ export default {
     return {
       disruption: false,
       jsonDisruptions: ''
+    }
+  },
+
+  computed: {
+    statusIcon: function () {
+      const status = this.route.route_service_status.description
+      if (status === 'Good Service') {
+        return { icon: 'mdi-check-circle', color: 'good-green' }
+      } else if (status === 'Minor Delays') {
+        return { icon: 'mdi-clock', color: 'minor-delay-orange' }
+      } else if (status === 'Major Delays') {
+        return { icon: 'mdi-clock', color: 'major-delay-red' }
+      } else if (status === 'Planned Works') {
+        return { icon: 'mdi-alert-circle', color: 'works-yellow' }
+      } else if (status === 'Part Suspended' || status === 'Suspended') {
+        return { icon: 'mdi-close-circle', color: 'closure-grey' }
+      } else if (status === 'General Alert' || status === 'Service Changes') {
+        return { icon: 'mdi-information', color: 'info-blue' }
+      } else {
+        return { icon: 'mdi-alert-circle', color: 'disruption-orange' }
+      }
     }
   },
 
@@ -106,7 +121,7 @@ export default {
 }
 
 .route-card {
-  min-height: 100px;
+  min-height: 70px;
 }
 
 .route-actions {
