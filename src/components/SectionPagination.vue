@@ -2,22 +2,24 @@
   <v-row id='pagination'>
     <v-col>
       <!-- Items per page select input -->
-      <div class='d-inline-block me-2'>
+      <div class='d-inline-block me-0 me-sm-2'>
         <v-select
           v-model='itemsPerPage'
           :items='[5, 10, 20, 50]'
           label='Per Page'
+          :density='smAndDown ? "comfortable" : "default"'
           :hide-details='true'
           variant='solo'
           class='per-page-select float-left'
         ></v-select>
       </div>
       <!-- Pagination controls -->
-      <div class='d-inline-block ms-2'>
+      <div class='d-inline-block ms-0 ms-sm-2'>
         <v-pagination
           v-model='currentPage'
           :length='totalPages'
-          :total-visible='smAndDown ? 1 : 4'
+          :total-visible='smAndUp ? 6 : 1'
+          :density='smAndDown ? "comfortable" : "default"'
           rounded='circle'
           class='float-left'
         ></v-pagination>
@@ -37,8 +39,8 @@ export default {
   ],
 
   setup () {
-    const { smAndDown } = useDisplay()
-    return { smAndDown }
+    const { smAndDown, smAndUp } = useDisplay()
+    return { smAndDown, smAndUp }
   },
 
   data: function () { // Default data
@@ -71,7 +73,7 @@ export default {
   },
 
   mounted: function () {
-    this.itemsPerPage = this.$store.state.perPage
+    this.itemsPerPage = parseInt(this.$store.state.perPage)
     this.calcTotalPages()
   },
 
