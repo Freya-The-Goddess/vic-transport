@@ -106,7 +106,7 @@ export default {
 }
 
 .route-card {
-  min-height: 90px;
+  min-height: 100px;
 }
 
 .route-actions {
