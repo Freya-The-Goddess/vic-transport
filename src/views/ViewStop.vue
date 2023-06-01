@@ -19,6 +19,7 @@
     <!-- Stop Header -->
     <v-row>
       <v-col>
+        <!-- Favourite Button -->
         <v-tooltip
           :text='favouriteStop ? "Remove Favourite" : "Add Favourite"'
           location='start'
@@ -31,15 +32,16 @@
               @click='favouriteButton()'
               :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
               size='xx-large'
-              class='fav-button text-favourite-yellow float-right'
+              class='fav-button text-favourite-yellow'
             ></v-icon>
           </template>
         </v-tooltip>
-        <div class='stop-heading d-flex align-center float-left fill-height'>
+        <!-- Stop Heading -->
+        <div class='stop-heading d-flex'>
           <v-card
             :color='$root.routeTypes[stopData.route_type].route_type_color'
             rounded='circle'
-            class='stop-heading-card text-over-color float-left me-5'
+            class='stop-heading-card text-over-color me-3'
           >
             <v-icon
               :icon='$root.routeTypes[stopData.route_type].route_type_icon'
@@ -47,7 +49,7 @@
               class='stop-heading-icon'
             ></v-icon>
           </v-card>
-          <div class='float-left fill-height align-center'>
+          <div class='stop-title align-center'>
             <h2>{{ stopData.stop_name }}</h2>
             <span>{{ $root.routeTypes[stopData.route_type].route_type_name }} Stop</span>
           </div>
@@ -62,7 +64,7 @@
             v-if='stopData.routes.length > maxChips'
             @click='routesExpanded = !routesExpanded'
             role='button'
-            class='card-expand-button float-right pb-1'
+            class='card-expand-button pb-1'
           >
             <v-icon
               :icon='routesExpanded ? "mdi-menu-up" : "mdi-menu-down"'
@@ -103,7 +105,7 @@
             <div
               @click='disruptionsExpanded = !disruptionsExpanded'
               role='button'
-              class='card-expand-button float-right pb-1'
+              class='card-expand-button pb-1'
             >
               <v-icon
                 :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
@@ -311,27 +313,32 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.v-tooltip .v-overlay__content {
-  background: rgba(var(--v-theme-surface-variant), 1) !important;
-}
-
 .fav-button {
-  max-width: 20%;
+  max-width: 50px;
+  float: right;
 }
 
 .stop-heading {
-  max-width: 80%;
+  max-width: calc(100% - 50px);
+  height: 100%;
+  float: left;
 }
 
 .stop-heading-card {
-  width: 70px;
-  height: 70px;
-  flex: 0 0 70px;
+  width: 65px;
+  height: 65px;
+  flex: 0 0 65px;
+  float: left;
 }
 
 .stop-heading-icon {
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
+}
+
+.stop-title {
+  height: 100%;
+  float: left;
 }
 
 .card-title {
@@ -340,9 +347,11 @@ export default defineComponent({
 
 .card-expand-title {
   width: calc(100% - 40px);
+  float: left;
 }
 
 .card-expand-button {
   width: 40px;
+  float: right;
 }
 </style>
