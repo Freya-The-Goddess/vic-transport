@@ -2,7 +2,25 @@
   <v-container class='pb-2'>
     <v-row>
       <v-col>
-        <h2>Nearby Stops</h2>
+        <!-- Page Title -->
+        <h2 class='page-title'>Nearby Stops</h2>
+        <!-- Reload Button -->
+        <v-tooltip
+          text='Reload Nearby Stops'
+          location='start'
+          open-delay='1200'
+          content-class='pt-2 pb-2 ps-3 pe-3'
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind='props'
+              @click='debouncedGetLocation()'
+              icon='mdi-sync'
+              size='large'
+              class='reload-button mt-1'
+            ></v-icon>
+          </template>
+        </v-tooltip>
       </v-col>
     </v-row>
   </v-container>
@@ -150,21 +168,27 @@ export default defineComponent({
   },
 
   created: function () {
-    // Mount debounced search function
+    // Mount debounced request function
     this.debouncedNearbyRequest = this.debounce(500, function () {
       this.locationSearch()
+    })
+
+    // Mount debounced get location function
+    this.debouncedGetLocation = this.debounce(500, function () {
+      this.getLocation()
     })
   },
 
   mounted: function () {
-    this.getLocation()
     if (this.$route.query.rt) this.filterRouteTypes = this.$route.query.rt.split(' ') // Get route types from URL params
     // TODO: add distance filter
+    this.debouncedGetLocation()
   },
 
   methods: {
     // Get location from browser
     getLocation: function () {
+      this.locationLoading = true
       navigator.geolocation.getCurrentPosition(
         (position) => { // location permission granted
           this.locationLoading = false
@@ -239,6 +263,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.reload-button {
+  max-width: 50px;
+  float: right;
+}
+
+.page-title {
+  max-width: calc(100% - 50px);
+  float: left;
+}
+
 .card-expand-title {
   width: calc(100% - 40px);
 }

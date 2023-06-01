@@ -2,7 +2,25 @@
   <v-container class='pb-2'>
     <v-row>
       <v-col>
-        <h2>Search Stops</h2>
+        <!-- Page Title -->
+        <h2 class='page-title'>Search Stops</h2>
+        <!-- Reload Button -->
+        <v-tooltip
+          text='Reload Search'
+          location='start'
+          open-delay='1200'
+          content-class='pt-2 pb-2 ps-3 pe-3'
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind='props'
+              @click='debouncedSearch()'
+              icon='mdi-sync'
+              size='large'
+              class='reload-button mt-1'
+            ></v-icon>
+          </template>
+        </v-tooltip>
       </v-col>
     </v-row>
   </v-container>
@@ -166,7 +184,7 @@ export default defineComponent({
   methods: {
     // Sanitise search string, push queries to route, and run search to API
     search: function () {
-      if (this.strSearchInput) { this.searchLoading = true }
+      this.searchLoading = true
       this.searchError = false
       this.jsonStops = []
       const urlPath = '/search'
@@ -231,6 +249,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.reload-button {
+  max-width: 50px;
+  float: right;
+}
+
+.page-title {
+  max-width: calc(100% - 50px);
+  float: left;
+}
+
 .card-expand-title {
   width: calc(100% - 40px);
 }

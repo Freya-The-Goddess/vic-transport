@@ -2,7 +2,25 @@
   <v-container class='pb-2'>
     <v-row>
       <v-col>
-        <h2>Favourite Stops</h2>
+        <!-- Page Title -->
+        <h2 class='page-title'>Favourite Stops</h2>
+        <!-- Reload Button -->
+        <v-tooltip
+          text='Reload Favourite Stops'
+          location='start'
+          open-delay='1200'
+          content-class='pt-2 pb-2 ps-3 pe-3'
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind='props'
+              @click='debouncedFavSearch()'
+              icon='mdi-sync'
+              size='large'
+              class='reload-button mt-1'
+            ></v-icon>
+          </template>
+        </v-tooltip>
       </v-col>
     </v-row>
   </v-container>
@@ -63,14 +81,14 @@ export default defineComponent({
       jsonStops: [],
       favStops: [],
       favError: '',
-      favLoading: false
+      favLoading: true
     }
   },
 
   watch: {
     jsonStops: {
       handler: function () {
-        if (this.$store.state.favouriteStops.length === this.jsonStops.length) {
+        if (this.jsonStops.length >= this.$store.state.favouriteStops.length) {
           this.favLoading = false
           this.favError = ''
           this.favStops = this.sortFavStops()
@@ -82,8 +100,15 @@ export default defineComponent({
     }
   },
 
+  created: function () {
+    // Mount debounced request function
+    this.debouncedFavSearch = this.debounce(500, function () {
+      this.favSearch()
+    })
+  },
+
   mounted: function () {
-    this.favSearch()
+    this.debouncedFavSearch()
   },
 
   methods: {
@@ -100,7 +125,10 @@ export default defineComponent({
 
     // Get favourites and run API request
     favSearch: function () {
+      this.favLoading = true
       this.favError = ''
+      this.jsonStops = []
+      this.favStops = []
       if (this.$store.state.favouriteStops.length) {
         this.favLoading = true
         this.$store.state.favouriteStops.forEach((favStop) => {
@@ -122,7 +150,28 @@ export default defineComponent({
           this.favLoading = false
           this.favError = error.message
         })
+    },
+
+    // Debounce function for inputs
+    debounce: function (timeout, func) {
+      let timer
+      return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+      }
     }
   }
 })
 </script>
+
+<style scoped>
+.reload-button {
+  max-width: 50px;
+  float: right;
+}
+
+.page-title {
+  max-width: calc(100% - 50px);
+  float: left;
+}
+</style>

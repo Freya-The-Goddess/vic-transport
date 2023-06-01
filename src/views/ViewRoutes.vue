@@ -2,7 +2,25 @@
   <v-container class='pb-2'>
     <v-row>
       <v-col>
-        <h2>Routes</h2>
+        <!-- Page Title -->
+        <h2 class='page-title'>Routes</h2>
+        <!-- Reload Button -->
+        <v-tooltip
+          text='Reload Routes'
+          location='start'
+          open-delay='1200'
+          content-class='pt-2 pb-2 ps-3 pe-3'
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind='props'
+              @click='debouncedRoutesRequest()'
+              icon='mdi-sync'
+              size='large'
+              class='reload-button mt-1'
+            ></v-icon>
+          </template>
+        </v-tooltip>
       </v-col>
     </v-row>
   </v-container>
@@ -149,7 +167,7 @@ export default defineComponent({
   },
 
   created: function () {
-    // Mount debounced search function
+    // Mount debounced request function
     this.debouncedRoutesRequest = this.debounce(500, function () {
       this.routesSearch()
     })
@@ -216,6 +234,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.reload-button {
+  max-width: 50px;
+  float: right;
+}
+
+.page-title {
+  max-width: calc(100% - 50px);
+  float: left;
+}
+
 .card-expand-title {
   width: calc(100% - 40px);
 }
