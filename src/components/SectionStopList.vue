@@ -24,7 +24,7 @@
 
 <script>
 // Child components
-import PaginationButtons from '../components/SectionPagination.vue'
+import PaginationButtons from '../components/FragmentPagination.vue'
 import StopCard from '../components/SectionStopCard.vue'
 
 export default {
