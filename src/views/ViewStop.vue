@@ -340,18 +340,4 @@ export default defineComponent({
   height: 100%;
   float: left;
 }
-
-.card-title {
-  width: 100%;
-}
-
-.card-expand-title {
-  width: calc(100% - 40px);
-  float: left;
-}
-
-.card-expand-button {
-  width: 40px;
-  float: right;
-}
 </style>

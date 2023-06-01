@@ -103,4 +103,28 @@ export default {
   background-color: rgba(var(--v-theme-surface), 1) !important;
   color: rgba(var(--v-theme-over-color), 0.8) !important;
 }
+
+.reload-button {
+  max-width: 50px;
+  float: right;
+}
+
+.page-title {
+  max-width: calc(100% - 50px);
+  float: left;
+}
+
+.card-title {
+  width: 100%;
+}
+
+.card-expand-title {
+  width: calc(100% - 40px);
+  float: left;
+}
+
+.card-expand-button {
+  width: 40px;
+  float: right;
+}
 </style>

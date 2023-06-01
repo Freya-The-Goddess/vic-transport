@@ -163,15 +163,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-.reload-button {
-  max-width: 50px;
-  float: right;
-}
-
-.page-title {
-  max-width: calc(100% - 50px);
-  float: left;
-}
-</style>

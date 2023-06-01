@@ -261,23 +261,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-.reload-button {
-  max-width: 50px;
-  float: right;
-}
-
-.page-title {
-  max-width: calc(100% - 50px);
-  float: left;
-}
-
-.card-expand-title {
-  width: calc(100% - 40px);
-}
-
-.card-expand-button {
-  width: 40px;
-}
-</style>
