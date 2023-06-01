@@ -67,7 +67,7 @@
 
 <script>
 // Child components
-import DisruptionList from '../components/SectionDisruptionList.vue'
+import DisruptionList from '../components/FragmentDisruptionList.vue'
 
 export default {
   name: 'DisruptionCard',
