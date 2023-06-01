@@ -25,7 +25,7 @@
 <script>
 // Child components
 import PaginationButtons from '../components/FragmentPagination.vue'
-import StopCard from '../components/SectionStopCard.vue'
+import StopCard from '../components/FragmentStopCard.vue'
 
 export default {
   name: 'StopList',
