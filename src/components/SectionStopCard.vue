@@ -55,7 +55,7 @@
 import { useDisplay } from 'vuetify'
 
 // Child components
-import RouteChips from '../components/SectionRouteChips.vue'
+import RouteChips from '../components/FragmentRouteChips.vue'
 
 export default {
   name: 'StopCard',

@@ -131,7 +131,7 @@ import { useDisplay } from 'vuetify'
 import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
 import DisruptionCard from '../components/SectionDisruptionCard.vue'
-import RouteChips from '../components/SectionRouteChips.vue'
+import RouteChips from '../components/FragmentRouteChips.vue'
 
 export default defineComponent({
   name: 'ViewStop',
