@@ -123,7 +123,7 @@ import { defineComponent } from 'vue'
 import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
 import MessageCard from '../components/SectionMessageCard.vue'
-import RouteTypeSelect from '../components/SectionRouteTypeSelect.vue'
+import RouteTypeSelect from '../components/FragmentRouteTypeSelect.vue'
 import StopList from '../components/SectionStopList.vue'
 
 export default defineComponent({
