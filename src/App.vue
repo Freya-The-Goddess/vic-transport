@@ -97,3 +97,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-tooltip > .v-overlay__content {
+  background-color: rgba(var(--v-theme-surface), 1) !important;
+  color: rgba(var(--v-theme-over-color), 0.8) !important;
+}
+</style>
