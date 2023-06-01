@@ -5,22 +5,11 @@
     <div
       class='float-right stop-actions'
     >
-      <v-tooltip
-        :text='favouriteStop ? "Remove Favourite" : "Add Favourite"'
-        location='start'
-        open-delay='1200'
-        content-class='text-caption pt-1 pb-1 ps-2 pe-2'
-      >
-        <template v-slot:activator="{ props }">
-          <v-icon
-            v-bind='props'
-            @click='favouriteButton()'
-            :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
-            class='text-favourite-yellow float-right'
-          ></v-icon>
-        </template>
-      </v-tooltip>
-      <br>
+      <v-icon
+        @click='favouriteButton()'
+        :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
+        class='text-favourite-yellow float-right'
+      ></v-icon><br>
       <v-icon
         v-if='disruption'
         icon='mdi-alert-circle'
@@ -156,10 +145,6 @@ export default {
 </script>
 
 <style scoped>
-.v-tooltip .v-overlay__content {
-  background: rgba(var(--v-theme-surface-variant), 1) !important;
-}
-
 .stop-card {
   min-height: 95px;
 }
