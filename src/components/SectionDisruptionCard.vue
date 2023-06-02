@@ -3,6 +3,7 @@
     <v-row v-if='currentDisruptions.length || disruptionLoading'>
       <v-col>
         <v-card>
+          <!-- Expand Button -->
           <div
             @click='disruptionsExpanded = !disruptionsExpanded'
             role='button'
@@ -13,6 +14,7 @@
               class='float-right'
             ></v-icon>
           </div>
+          <!-- Card Header -->
           <div
             @click='disruptionsExpanded = !disruptionsExpanded'
             role='button'
@@ -39,25 +41,18 @@
           </div>
           <v-expand-transition>
             <template v-if='disruptionsExpanded'>
-              <div
+              <!-- Error and Loading Cards -->
+              <loading-card
                 v-if='disruptionLoading && !disruptionError'
-                class='mt-2 mb-2'
-              >
-                <v-progress-circular
-                  indeterminate
-                  :size='20'
-                  :width='3'
-                  class='float-left me-2'
-                ></v-progress-circular>
-                <span class='float-left ms-2'>Loading Disruptions...</span>
-              </div>
-              <div
+                text='Loading Disruptions...'
+                class='pt-1'
+              ></loading-card>
+              <error-card
                 v-else-if='disruptionError'
-                class='mt-2 mb-2'
-              >
-                <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
-                <span class='text-error-text float-left ms-1'><span class='font-weight-bold'>Error:</span> {{ disruptionError }}</span>
-              </div>
+                :text='disruptionError'
+                class='pt-1'
+              ></error-card>
+              <!-- Disruptions List -->
               <disruption-list
                 v-else-if='disruptionData.length'
                 :disruptionList='currentDisruptions'
@@ -74,12 +69,16 @@
 <script>
 // Child components
 import DisruptionList from '../components/FragmentDisruptionList.vue'
+import ErrorCard from '../components/SectionErrorCard.vue'
+import LoadingCard from '../components/SectionLoadingCard.vue'
 
 export default {
   name: 'DisruptionCard',
 
   components: { // Child components
-    DisruptionList
+    DisruptionList,
+    ErrorCard,
+    LoadingCard
   },
 
   props: [ // Component properties
