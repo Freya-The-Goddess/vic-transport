@@ -32,10 +32,16 @@ export default {
 
   methods: {
     disruptionIcon: function (disruption) {
-      if (disruption.disruption_type === 'Planned Works') {
+      if (disruption.disruption_type === 'Minor Delays') {
+        return { icon: 'mdi-clock', color: 'minor-delay-orange' }
+      } else if (disruption.disruption_type === 'Major Delays') {
+        return { icon: 'mdi-clock', color: 'major-delay-red' }
+      } else if (disruption.disruption_type === 'Planned Works') {
         return { icon: 'mdi-alert', color: 'works-yellow' }
-      } else if (disruption.disruption_type === 'Planned Closure') {
+      } else if (disruption.disruption_type === 'Part Suspended' || disruption.disruption_type === 'Suspended' || disruption.disruption_type === 'Planned Closure') {
         return { icon: 'mdi-alert-box', color: 'closure-grey' }
+      } else if (disruption.disruption_type === 'General Alert' || disruption.disruption_type === 'Service Changes' || disruption.disruption_type === 'Service Information') {
+        return { icon: 'mdi-information', color: 'info-blue' }
       } else {
         return { icon: 'mdi-alert-circle', color: 'disruption-orange' }
       }
