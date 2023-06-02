@@ -14,13 +14,12 @@
       </v-col>
     </v-row>
   </v-container>
-  <!-- Stop Data -->
+  <!-- Route Data -->
   <v-container v-else>
-    <!-- Stop Header -->
+    <!-- Route Header -->
     <v-row>
       <v-col>
-        <!-- Stop Heading -->
-        <div class='route-heading d-flex'>
+        <!-- Route Heading -->
           <v-card
             :color='$root.routeTypes[routeData.route_type].route_type_color'
             rounded='circle'
@@ -45,13 +44,13 @@
         </div>
       </v-col>
     </v-row>
-    <!-- Stop Disruptions -->
+    <!-- Route Disruptions -->
     <disruption-card
       :disruption-data='disruptionData'
       :disruption-loading='disruptionLoading'
       :disruption-error='disruptionError'
     ></disruption-card>
-    <!-- Stop Departures -->
+    <!-- Route Departures -->
     <v-row>
       <v-col>
         <v-card class='pa-3'>
@@ -147,7 +146,7 @@ export default defineComponent({
         })
     },
 
-    // Query API for disruptions at stop
+    // Query API for disruptions on route
     getDisruptionsRequest: function (routeId) {
       this.disruptionLoading = true
       const request = `/v3/disruptions/route/${routeId}`
