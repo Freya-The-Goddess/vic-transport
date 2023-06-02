@@ -12,7 +12,7 @@
       ></v-icon>
     </div>
     <router-link
-      :to='"/route"'
+      :to='"/route/"+route.route_id+"/"+route.route_type'
       class='text-decoration-none text-over-color'
     >
       <div

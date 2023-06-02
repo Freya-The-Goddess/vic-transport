@@ -17,7 +17,7 @@
       ></v-icon>
     </div>
     <router-link
-      :to='"/stop/" + stop.stop_id + "/route_type/" + stop.route_type'
+      :to='"/stop/" + stop.stop_id + "/" + stop.route_type'
       class='text-decoration-none text-over-color'
     >
       <div
