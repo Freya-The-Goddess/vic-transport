@@ -19,7 +19,40 @@
     <!-- Route Header -->
     <v-row>
       <v-col>
+        <!-- Route Status -->
+        <v-tooltip
+          v-if='xs'
+          :text='routeData.route_service_status.description'
+          location='start'
+          open-delay='1200'
+          content-class='pt-2 pb-2 ps-3 pe-3'
+        >
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind='props'
+              :icon='statusIcon.icon'
+              :class='"text-"+statusIcon.color'
+              size='large'
+              class='route-status-xs'
+            ></v-icon>
+          </template>
+        </v-tooltip>
+        <div
+          v-else
+          class='route-status'
+        >
+          <span>{{ routeData.route_service_status.description }}</span>
+          <v-icon
+            :icon='statusIcon.icon'
+            :class='"text-"+statusIcon.color'
+            size='large'
+            class='ms-2'
+          ></v-icon>
+        </div>
         <!-- Route Heading -->
+        <div
+          class='d-flex'
+          :class='xs ? "route-heading-xs" : "route-heading"'>
           <v-card
             :color='$root.routeTypes[routeData.route_type].route_type_color'
             rounded='circle'
@@ -89,8 +122,8 @@ export default defineComponent({
   },
 
   setup () {
-    const { xs, sm, md, lgAndUp } = useDisplay()
-    return { xs, sm, md, lgAndUp }
+    const { xs } = useDisplay()
+    return { xs }
   },
 
   data: function () { // Default data
@@ -104,6 +137,27 @@ export default defineComponent({
       disruptionData: [],
       disruptionLoading: false,
       disruptionError: ''
+    }
+  },
+
+  computed: {
+    statusIcon: function () {
+      const status = this.routeData.route_service_status.description
+      if (status === 'Good Service') {
+        return { icon: 'mdi-check-circle', color: 'good-green' }
+      } else if (status === 'Minor Delays') {
+        return { icon: 'mdi-clock', color: 'minor-delay-orange' }
+      } else if (status === 'Major Delays') {
+        return { icon: 'mdi-clock', color: 'major-delay-red' }
+      } else if (status === 'Planned Works') {
+        return { icon: 'mdi-alert-circle', color: 'works-yellow' }
+      } else if (status === 'Part Suspended' || status === 'Suspended') {
+        return { icon: 'mdi-close-circle', color: 'closure-grey' }
+      } else if (status === 'General Alert' || status === 'Service Changes' || status === 'Service Information' || status === 'Planned Closure') {
+        return { icon: 'mdi-information', color: 'info-blue' }
+      } else {
+        return { icon: 'mdi-alert-circle', color: 'disruption-orange' }
+      }
     }
   },
 
@@ -174,7 +228,24 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.route-status {
+  max-width: 180px;
+  float: right;
+}
+
+.route-status-xs {
+  max-width: 50px;
+  float: right;
+}
+
 .route-heading {
+  max-width: calc(100% - 180px);
+  height: 100%;
+  float: left;
+}
+
+.route-heading-xs {
+  max-width: calc(100% - 50px);
   height: 100%;
   float: left;
 }
