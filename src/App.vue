@@ -120,11 +120,9 @@ export default {
 
 .card-expand-title {
   width: calc(100% - 40px);
-  float: left;
 }
 
 .card-expand-button {
   width: 40px;
-  float: right;
 }
 </style>

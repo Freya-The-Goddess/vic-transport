@@ -1,39 +1,41 @@
 <template>
-  <v-row>
-    <v-col
-      v-for='(n,routeType) in 4'
-      :key='routeType'
-      cols='3'
-      class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
-    >
-      <v-btn
-        :color='$root.routeTypes[routeType].route_type_color + (routeTypeSelected(routeType.toString()) ? "" : "-dim")'
-        @click='selectRouteType(routeType.toString())'
-        class='route-type-button text-over-color rounded-xl pt-2 pb-2 pt-md-1 pb-md-1'
+  <v-container class='pa-2 pt-3'>
+    <v-row>
+      <v-col
+        v-for='(n,routeType) in 4'
+        :key='routeType'
+        cols='3'
+        class='ps-1 pe-1 ps-sm-2 pe-sm-2 ps-md-3 pe-md-3'
       >
-        <div class='d-flex flex-column flex-md-row align-center'>
-          <div class='mb-1 mb-md-0 me-md-2'>
-            <v-icon
-              :icon='$root.routeTypes[routeType].route_type_icon'
-              size='large'
-              class='d-none d-md-inline'
-            ></v-icon>
-            <v-icon
-              :icon='$root.routeTypes[routeType].route_type_icon'
-              size='xx-large'
-              class='d-inline d-md-none'
-            ></v-icon>
+        <v-btn
+          :color='$root.routeTypes[routeType].route_type_color + (routeTypeSelected(routeType.toString()) ? "" : "-dim")'
+          @click='selectRouteType(routeType.toString())'
+          class='route-type-button text-over-color rounded-xl pt-2 pb-2 pt-md-1 pb-md-1'
+        >
+          <div class='d-flex flex-column flex-md-row align-center'>
+            <div class='mb-1 mb-md-0 me-md-2'>
+              <v-icon
+                :icon='$root.routeTypes[routeType].route_type_icon'
+                size='large'
+                class='d-none d-md-inline'
+              ></v-icon>
+              <v-icon
+                :icon='$root.routeTypes[routeType].route_type_icon'
+                size='xx-large'
+                class='d-inline d-md-none'
+              ></v-icon>
+            </div>
+            <div class='text-caption text-md-button d-none d-sm-block'>
+              {{ $root.routeTypes[routeType].route_type_name.toUpperCase() }}
+            </div>
+            <div class='text-caption d-block d-sm-none'>
+              {{ $root.routeTypes[routeType].route_type_short_name.toUpperCase() }}
+            </div>
           </div>
-          <div class='text-caption text-md-button d-none d-sm-block'>
-            {{ $root.routeTypes[routeType].route_type_name.toUpperCase() }}
-          </div>
-          <div class='text-caption d-block d-sm-none'>
-            {{ $root.routeTypes[routeType].route_type_short_name.toUpperCase() }}
-          </div>
-        </div>
-      </v-btn>
-    </v-col>
-  </v-row>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

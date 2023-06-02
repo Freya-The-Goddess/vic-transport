@@ -59,7 +59,7 @@
           </div>
           <div class='pt-1'>
             <v-expand-transition>
-              <div v-show='filtersExpanded' class='pt-3 pb-2'>
+              <div v-show='filtersExpanded'>
                 <route-type-select
                   :multiple='false'
                   :select-route-types='$route.query.rt ? $route.query.rt.split(" ") : ["0"]'

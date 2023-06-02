@@ -64,7 +64,7 @@
             v-if='stopData.routes.length > maxChips'
             @click='routesExpanded = !routesExpanded'
             role='button'
-            class='card-expand-button pb-1'
+            class='card-expand-button float-right pb-1'
           >
             <v-icon
               :icon='routesExpanded ? "mdi-menu-up" : "mdi-menu-down"'

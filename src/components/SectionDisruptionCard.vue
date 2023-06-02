@@ -6,7 +6,7 @@
           <div
             @click='disruptionsExpanded = !disruptionsExpanded'
             role='button'
-            class='card-expand-button pb-1'
+            class='card-expand-button float-right pb-1'
           >
             <v-icon
               :icon='disruptionsExpanded ? "mdi-menu-up" : "mdi-menu-down"'
@@ -44,9 +44,9 @@
                   indeterminate
                   :size='20'
                   :width='3'
-                  class='me-2'
+                  class='float-left me-2'
                 ></v-progress-circular>
-                <span class='ms-2'>Loading Disruptions...</span>
+                <span class='float-left ms-2'>Loading Disruptions...</span>
               </div>
               <div v-else-if='disruptionError'>
                 <v-icon icon='text-error-text mdi-exclamation me-1' class='float-left'></v-icon>
@@ -100,15 +100,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.card-expand-title {
-  width: calc(100% - 40px);
-  float: left;
-}
-
-.card-expand-button {
-  width: 40px;
-  float: right;
-}
-</style>
