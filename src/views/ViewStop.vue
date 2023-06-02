@@ -1,10 +1,10 @@
 <template>
   <!-- Loading and Error Cards -->
-  <v-container v-if='!stopData || stopError'>
+  <v-container v-if='stopLoading || stopError'>
     <v-row>
       <v-col>
         <loading-card
-          v-if='!stopData && !stopError'
+          v-if='stopLoading && !stopError'
           text='Loading Stop Data...'
         ></loading-card>
         <error-card
@@ -51,7 +51,10 @@
           </v-card>
           <div class='stop-title align-center'>
             <h2>{{ stopData.stop_name }}</h2>
-            <span>{{ $root.routeTypes[stopData.route_type].route_type_name }} Stop</span>
+            <span>
+              {{ $root.routeTypes[stopData.route_type].route_type_name }}
+              {{ stopData.route_type === 0 ? "Station" : "Stop" }}
+            </span>
           </div>
         </div>
       </v-col>
@@ -150,7 +153,8 @@ export default defineComponent({
 
   data: function () { // Default data
     return {
-      stopData: '',
+      stopData: [],
+      stopLoading: true,
       stopError: '',
       routesExpanded: false,
       disruptionData: [],
@@ -195,6 +199,7 @@ export default defineComponent({
   methods: {
     // Query API for stop data
     getStopRequest: function (stopId, routeType) {
+      this.stopLoading = true
       const request = `/v3/stops/${stopId}/route_type/${routeType}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
@@ -202,9 +207,11 @@ export default defineComponent({
           if (this.stopData.routes.length < this.maxChips) {
             this.routesExpanded = true
           }
+          this.stopLoading = false
           this.stopError = ''
         })
         .catch((error) => {
+          this.stopLoading = false
           this.stopError = error.message
         })
     },

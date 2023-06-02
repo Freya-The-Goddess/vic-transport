@@ -26,9 +26,14 @@ const routes = [
     component: () => import(/* webpackChunkName: "search" */ '../views/ViewSearch.vue')
   },
   {
-    path: '/stop/:stopId/route_type/:routeType',
+    path: '/stop/:stopId/:routeType',
     name: 'stop',
     component: () => import(/* webpackChunkName: "search" */ '../views/ViewStop.vue')
+  },
+  {
+    path: '/route/:routeId/:routeType',
+    name: 'route',
+    component: () => import(/* webpackChunkName: "search" */ '../views/ViewRoute.vue')
   },
   { // route not found catch-all
     path: '/:pathMatch(.*)*',
