@@ -28,7 +28,7 @@ import PaginationButtons from '../components/FragmentPagination.vue'
 import RouteCard from '../components/FragmentRouteCard.vue'
 
 export default {
-  name: 'RouteList',
+  name: 'RouteGrid',
 
   props: [ // Component properties
     'routeList'

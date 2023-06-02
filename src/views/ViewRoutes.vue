@@ -96,9 +96,9 @@
     v-if='jsonRoutes.length'
     class='mt-1'
   >
-    <route-list
+    <route-grid
       :route-list='sortedRoutes'
-    ></route-list>
+    ></route-grid>
   </v-container>
 </template>
 
@@ -110,7 +110,7 @@ import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
 import MessageCard from '../components/SectionMessageCard.vue'
 import RouteTypeSelect from '../components/FragmentRouteTypeSelect.vue'
-import RouteList from '../components/SectionRouteList.vue'
+import RouteGrid from '../components/SectionRouteGrid.vue'
 
 export default defineComponent({
   name: 'ViewFavourites',
@@ -120,7 +120,7 @@ export default defineComponent({
     LoadingCard,
     MessageCard,
     RouteTypeSelect,
-    RouteList
+    RouteGrid
   },
 
   data: function () { // Default data
