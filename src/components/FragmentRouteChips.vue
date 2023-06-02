@@ -1,37 +1,39 @@
 <template>
-  <div
-    v-if='selectable && chipList.length > 1'
-    class='font-italic mt-2'
-  >
-    Select route to filter disruptions and departures
-  </div>
-  <v-chip-group
-    v-model='selectedRouteIndex'
-    :class='!selectable || chipList.length <= 1 ? "mt-2" : ""'
-  >
-    <v-chip
-      v-for='route in trimmedChipList'
-      :key='route.route_id'
-      :disabled='!selectable'
-      :filter='selectable'
-      variant='outlined'
-      :class='"text-" + $root.routeTypes[route.route_type].route_type_color'
-      class='chip-opacity'
-    >
-      <span class='text-caption text-over-color'>{{ route.short_name }}</span>
-    </v-chip>
+  <div>
     <div
-      v-if='extraChips'
-      @click='expand'
-      role='button'
+      v-if='selectable && chipList.length > 1'
+      class='font-italic mt-2'
+    >
+      Select route to filter disruptions and departures
+    </div>
+    <v-chip-group
+      v-model='selectedRouteIndex'
+      :class='!selectable || chipList.length <= 1 ? "mt-2" : ""'
     >
       <v-chip
-        :disabled='true'
+        v-for='route in trimmedChipList'
+        :key='route.route_id'
+        :disabled='!selectable'
+        :filter='selectable'
         variant='outlined'
-        class='chip-opacity text-caption'
-      >+{{ extraChips }} more...</v-chip>
-    </div>
-  </v-chip-group>
+        :class='"text-" + $root.routeTypes[route.route_type].route_type_color'
+        class='chip-opacity'
+      >
+        <span class='text-caption text-over-color'>{{ route.short_name }}</span>
+      </v-chip>
+      <div
+        v-if='extraChips'
+        @click='expand'
+        role='button'
+      >
+        <v-chip
+          :disabled='true'
+          variant='outlined'
+          class='chip-opacity text-caption'
+        >+{{ extraChips }} more...</v-chip>
+      </div>
+    </v-chip-group>
+  </div>
 </template>
 
 <script>
@@ -44,22 +46,18 @@ export default {
     'maxChips',
     'truncateChips',
     'selectable',
-    'expandable'
+    'expandable',
+    'selectRoute'
+  ],
+
+  emits: [ // Component emits
+    'expand',
+    'selectedRoute'
   ],
 
   data: function () {
     return {
       selectedRouteIndex: undefined
-    }
-  },
-
-  watch: {
-    selectedRouteIndex: function () {
-      if (this.selectedRouteIndex !== undefined) {
-        this.$emit('selectedRoute', { route_id: this.chipList[this.selectedRouteIndex].route_id, route_type: this.chipList[this.selectedRouteIndex].route_type })
-      } else {
-        this.$emit('selectedRoute', null)
-      }
     }
   },
 
@@ -116,6 +114,23 @@ export default {
       if (this.maxChips > 0 && this.chipList.length > this.maxChips) {
         return this.chipList.length - (this.maxChips - 1)
       } else return 0
+    }
+  },
+
+  watch: {
+    selectedRouteIndex: function () {
+      if (this.selectedRouteIndex !== undefined) {
+        this.$emit('selectedRoute', { route_id: this.chipList[this.selectedRouteIndex].route_id, route_type: this.chipList[this.selectedRouteIndex].route_type })
+      } else {
+        this.$emit('selectedRoute', null)
+      }
+    }
+  },
+
+  mounted: function () {
+    // Populate selection from props
+    if (this.selectRoute && this.selectable) {
+      this.selectedRouteIndex = this.chipList.findIndex(route => route.route_id === parseInt(this.selectRoute))
     }
   },
 

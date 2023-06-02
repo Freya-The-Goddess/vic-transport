@@ -95,7 +95,9 @@
             :selectable='!!(stopData.routes.length-1)'
             :expandable='true'
             @expand='routesExpanded = true'
-            class='mt-2 w-100'
+            :select-route='$route.query.r ? $route.query.r : null'
+            @selected-route='getSelectedRoute'
+            class='mt-1 w-100'
           ></route-chips>
         </v-card>
       </v-col>
@@ -157,6 +159,7 @@ export default defineComponent({
       stopLoading: true,
       stopError: '',
       routesExpanded: false,
+      selectedRoute: null,
       disruptionData: [],
       disruptionLoading: false,
       disruptionError: ''
@@ -191,16 +194,28 @@ export default defineComponent({
     }
   },
 
+  created: function () {
+    // Mount debounced stop request function
+    this.debouncedStopRequest = this.debounce(500, function () {
+      this.stopRequest()
+    })
+
+    // Mount debounced disruptions request function
+    this.debouncedDisruptionsRequest = this.debounce(500, function () {
+      this.disruptionsRequest()
+    })
+  },
+
   mounted: function () {
-    this.getStopRequest(this.$route.params.stopId, this.$route.params.routeType)
-    this.getDisruptionsRequest(this.$route.params.stopId)
+    this.debouncedStopRequest()
+    this.debouncedDisruptionsRequest()
   },
 
   methods: {
     // Query API for stop data
-    getStopRequest: function (stopId, routeType) {
+    stopRequest: function () {
       this.stopLoading = true
-      const request = `/v3/stops/${stopId}/route_type/${routeType}`
+      const request = `/v3/stops/${this.$route.params.stopId}/route_type/${this.$route.params.routeType}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.stopData = data.stop
@@ -217,9 +232,14 @@ export default defineComponent({
     },
 
     // Query API for disruptions at stop
-    getDisruptionsRequest: function (stopId) {
+    disruptionsRequest: function () {
       this.disruptionLoading = true
-      const request = `/v3/disruptions/stop/${stopId}`
+      let request = ''
+      if (this.selectedRoute) {
+        request = `/v3/disruptions/route/${this.selectedRoute.route_id}/stop/${this.$route.params.stopId}`
+      } else {
+        request = `/v3/disruptions/stop/${this.$route.params.stopId}`
+      }
       this.$root.ptvApiRequest(request)
         .then((data) => {
           const disruptions = []
@@ -240,11 +260,37 @@ export default defineComponent({
         })
     },
 
+    // Get selected route callback for child component $emit event
+    getSelectedRoute: function (value) {
+      this.selectedRoute = value
+      const urlPath = this.$route.path
+      const urlQuery = {}
+      if (this.selectedRoute) {
+        urlQuery.r = this.selectedRoute.route_id
+      }
+      if (this.$route.name === 'stop') { // prevents bouncing if path changes
+        this.$router.push({ // Push new search query to URL
+          path: urlPath,
+          query: urlQuery
+        })
+      }
+      this.debouncedDisruptionsRequest()
+    },
+
     favouriteButton: function () {
       if (!this.favouriteStop) {
         this.$store.commit('addFavouriteStop', { stopId: this.stopData.stop_id, routeType: this.stopData.route_type })
       } else {
         this.$store.commit('removeFavouriteStop', { stopId: this.stopData.stop_id, routeType: this.stopData.route_type })
+      }
+    },
+
+    // Debounce function for inputs
+    debounce: function (timeout, func) {
+      let timer
+      return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
       }
     }
   }
