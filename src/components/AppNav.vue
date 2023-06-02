@@ -86,7 +86,7 @@
           >
             <v-btn
               @click='navigate'
-              :color='$route.name === "search" || $route.name === "advancedSearch" ? "nav-button-selected" : "nav-button"'
+              :color='$route.name === "search" ? "nav-button-selected" : "nav-button"'
               class='nav-button text-over-color rounded-xl pt-1 pb-2 pb-md-1'
             >
               <div class='d-flex flex-column flex-md-row align-center'>
