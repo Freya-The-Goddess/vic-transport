@@ -110,9 +110,9 @@
     v-if='jsonStops.length'
     class='mt-1'
   >
-    <stop-list
+    <stop-grid
       :stop-list='jsonStops'
-    ></stop-list>
+    ></stop-grid>
   </v-container>
 </template>
 
@@ -124,7 +124,7 @@ import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
 import MessageCard from '../components/SectionMessageCard.vue'
 import RouteTypeSelect from '../components/FragmentRouteTypeSelect.vue'
-import StopList from '../components/SectionStopList.vue'
+import StopGrid from '../components/SectionStopGrid.vue'
 
 export default defineComponent({
   name: 'ViewSearch',
@@ -134,7 +134,7 @@ export default defineComponent({
     LoadingCard,
     MessageCard,
     RouteTypeSelect,
-    StopList
+    StopGrid
   },
 
   data: function () { // Default data

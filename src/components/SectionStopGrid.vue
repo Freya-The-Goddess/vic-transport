@@ -28,7 +28,7 @@ import PaginationButtons from '../components/FragmentPagination.vue'
 import StopCard from '../components/FragmentStopCard.vue'
 
 export default {
-  name: 'StopList',
+  name: 'StopGrid',
 
   props: [ // Component properties
     'stopList'

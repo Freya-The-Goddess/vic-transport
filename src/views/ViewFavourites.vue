@@ -51,9 +51,9 @@
     v-if='favStops.length'
     class='pt-3 pb-2'
   >
-    <stop-list
+    <stop-grid
       :stop-list='favStops'
-    ></stop-list>
+    ></stop-grid>
   </v-container>
 </template>
 
@@ -64,7 +64,7 @@ import { defineComponent } from 'vue'
 import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
 import MessageCard from '../components/SectionMessageCard.vue'
-import StopList from '../components/SectionStopList.vue'
+import StopGrid from '../components/SectionStopGrid.vue'
 
 export default defineComponent({
   name: 'ViewFavourites',
@@ -73,7 +73,7 @@ export default defineComponent({
     ErrorCard,
     LoadingCard,
     MessageCard,
-    StopList
+    StopGrid
   },
 
   data: function () { // Default data
