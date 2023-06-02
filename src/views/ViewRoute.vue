@@ -161,17 +161,34 @@ export default defineComponent({
     }
   },
 
+  created: function () {
+    // Mount debounced route request function
+    this.debouncedRouteRequest = this.debounce(500, function () {
+      this.routeRequest()
+    })
+
+    // Mount debounced stops request function
+    this.debouncedStopsRequest = this.debounce(500, function () {
+      this.stopsRequest()
+    })
+
+    // Mount debounced disruptions request function
+    this.debouncedDisruptionsRequest = this.debounce(500, function () {
+      this.disruptionsRequest()
+    })
+  },
+
   mounted: function () {
-    this.getRouteRequest(this.$route.params.routeId)
-    this.getStopsRequest(this.$route.params.routeId, this.$route.params.routeType)
-    this.getDisruptionsRequest(this.$route.params.routeId)
+    this.debouncedRouteRequest()
+    this.debouncedStopsRequest()
+    this.debouncedDisruptionsRequest()
   },
 
   methods: {
     // Query API for stop data
-    getRouteRequest: function (routeId) {
+    routeRequest: function () {
       this.routeLoading = true
-      const request = `/v3/routes/${routeId}`
+      const request = `/v3/routes/${this.$route.params.routeId}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.routeData = data.route
@@ -185,9 +202,9 @@ export default defineComponent({
     },
 
     // Query API for stops data
-    getStopsRequest: function (routeId, routeType) {
+    stopsRequest: function () {
       this.stopsLoading = true
-      const request = `/v3/stops/route/${routeId}/route_type/${routeType}`
+      const request = `/v3/stops/route/${this.$route.params.routeId}/route_type/${this.$route.params.routeType}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
           this.stopsData = data.stops
@@ -201,9 +218,9 @@ export default defineComponent({
     },
 
     // Query API for disruptions on route
-    getDisruptionsRequest: function (routeId) {
+    disruptionsRequest: function () {
       this.disruptionLoading = true
-      const request = `/v3/disruptions/route/${routeId}`
+      const request = `/v3/disruptions/route/${this.$route.params.routeId}`
       this.$root.ptvApiRequest(request)
         .then((data) => {
           const disruptions = []
@@ -222,6 +239,15 @@ export default defineComponent({
           this.disruptionLoading = false
           this.disruptionError = error.message
         })
+    },
+
+    // Debounce function for inputs
+    debounce: function (timeout, func) {
+      let timer
+      return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+      }
     }
   }
 })
