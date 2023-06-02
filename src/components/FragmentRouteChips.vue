@@ -1,13 +1,13 @@
 <template>
-  <v-chip-group>
+  <v-chip-group v-model='selectedRouteIndex'>
     <v-chip
-      v-for='(route, index) in trimmedChipList'
-      :key='index'
+      v-for='route in trimmedChipList'
+      :key='route.route_id'
       :disabled='!selectable'
       :filter='selectable'
       variant='outlined'
-      style='opacity: 1'
       :class='"text-" + $root.routeTypes[route.route_type].route_type_color'
+      class='chip-opacity'
     >
       <span class='text-caption text-over-color'>{{ route.short_name }}</span>
     </v-chip>
@@ -19,8 +19,7 @@
       <v-chip
         :disabled='true'
         variant='outlined'
-        style='opacity: 1'
-        class='text-caption'
+        class='chip-opacity text-caption'
       >+{{ extraChips }} more...</v-chip>
     </div>
   </v-chip-group>
@@ -38,6 +37,22 @@ export default {
     'selectable',
     'expandable'
   ],
+
+  data: function () {
+    return {
+      selectedRouteIndex: undefined
+    }
+  },
+
+  watch: {
+    selectedRouteIndex: function () {
+      if (this.selectedRouteIndex !== undefined) {
+        this.$emit('selectedRoute', { route_id: this.chipList[this.selectedRouteIndex].route_id, route_type: this.chipList[this.selectedRouteIndex].route_type })
+      } else {
+        this.$emit('selectedRoute', null)
+      }
+    }
+  },
 
   computed: { // Computed values
     // Sort routes list
@@ -58,6 +73,10 @@ export default {
         } else {
           return a.route_number.split('-')[0].replace(/\D/g, '') - b.route_number.split('-')[0].replace(/\D/g, '')
         }
+      }).filter((value, index, self) => { // Remove duplicates (from API)
+        return index === self.findIndex((t) => (
+          t.route_id === value.route_id && t.route_type === value.route_type
+        ))
       })
     },
 
@@ -65,12 +84,12 @@ export default {
     chipList: function () {
       return this.sortedRoutesList.map((route) => {
         if ((route.route_type === 1 || route.route_type === 2) && route.route_number !== '') {
-          return { short_name: route.route_number.toString(), route_type: route.route_type }
+          return { short_name: route.route_number.toString(), route_type: route.route_type, route_id: route.route_id }
         } else {
           if (route.route_name.length <= 15 || !this.truncateChips) {
-            return { short_name: route.route_name, route_type: route.route_type }
+            return { short_name: route.route_name, route_type: route.route_type, route_id: route.route_id }
           } else {
-            return { short_name: route.route_name.substr(0, 12) + '...', route_type: route.route_type }
+            return { short_name: route.route_name.substr(0, 12) + '...', route_type: route.route_type, route_id: route.route_id }
           }
         }
       })
@@ -98,3 +117,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.chip-opacity {
+  opacity: 1 !important;
+}
+</style>
