@@ -38,9 +38,9 @@ export default {
         return { icon: 'mdi-clock', color: 'major-delay-red' }
       } else if (disruption.disruption_type === 'Planned Works') {
         return { icon: 'mdi-alert', color: 'works-yellow' }
-      } else if (disruption.disruption_type === 'Part Suspended' || disruption.disruption_type === 'Suspended' || disruption.disruption_type === 'Planned Closure') {
+      } else if (disruption.disruption_type === 'Part Suspended' || disruption.disruption_type === 'Suspended') {
         return { icon: 'mdi-alert-box', color: 'closure-grey' }
-      } else if (disruption.disruption_type === 'General Alert' || disruption.disruption_type === 'Service Changes' || disruption.disruption_type === 'Service Information') {
+      } else if (disruption.disruption_type === 'General Alert' || disruption.disruption_type === 'Service Changes' || disruption.disruption_type === 'Service Information' || disruption.disruption_type === 'Planned Closure') {
         return { icon: 'mdi-information', color: 'info-blue' }
       } else {
         return { icon: 'mdi-alert-circle', color: 'disruption-orange' }

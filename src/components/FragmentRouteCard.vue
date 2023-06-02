@@ -83,7 +83,7 @@ export default {
         return { icon: 'mdi-alert-circle', color: 'works-yellow' }
       } else if (status === 'Part Suspended' || status === 'Suspended') {
         return { icon: 'mdi-close-circle', color: 'closure-grey' }
-      } else if (status === 'General Alert' || status === 'Service Changes' || status === 'Service Information') {
+      } else if (status === 'General Alert' || status === 'Service Changes' || status === 'Service Information' || status === 'Planned Closure') {
         return { icon: 'mdi-information', color: 'info-blue' }
       } else {
         return { icon: 'mdi-alert-circle', color: 'disruption-orange' }
