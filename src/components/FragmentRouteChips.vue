@@ -3,12 +3,11 @@
     <div v-if='selectable && chipList.length > 1'>
       Select route to filter disruptions and departures
     </div>
-    <v-chip-group
-      v-model='selectedRouteIndex'
-    >
+    <v-chip-group v-model='selectedRoute'>
       <v-chip
         v-for='route in trimmedChipList'
         :key='route.route_id'
+        :value='route'
         :disabled='!selectable'
         :filter='selectable'
         variant='outlined'
@@ -53,7 +52,7 @@ export default {
 
   data: function () {
     return {
-      selectedRouteIndex: undefined
+      selectedRoute: undefined
     }
   },
 
@@ -114,9 +113,9 @@ export default {
   },
 
   watch: {
-    selectedRouteIndex: function () {
-      if (this.selectedRouteIndex !== undefined) {
-        this.$emit('selectedRoute', { route_id: this.chipList[this.selectedRouteIndex].route_id, route_type: this.chipList[this.selectedRouteIndex].route_type })
+    selectedRoute: function () {
+      if (this.selectedRoute !== undefined) {
+        this.$emit('selectedRoute', this.selectedRoute)
       } else {
         this.$emit('selectedRoute', null)
       }
@@ -126,7 +125,7 @@ export default {
   mounted: function () {
     // Populate selection from props
     if (this.selectRoute && this.selectable) {
-      this.selectedRouteIndex = this.chipList.findIndex(route => route.route_id === parseInt(this.selectRoute))
+      this.selectedRoute = this.chipList.find(route => route.route_id === parseInt(this.selectRoute))
     }
   },
 
