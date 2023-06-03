@@ -86,17 +86,38 @@
     <!-- Route Departures -->
     <v-row>
       <v-col>
-        <v-card class='pa-3'>
-          <div class='card-title d-flex align-center'>
+        <v-card>
+          <div class='card-title d-flex align-center pa-3 pb-1'>
             <v-icon
-              icon='mdi-clock'
+              icon='mdi-transit-connection-variant'
               class='d-inline-block fill-height'
             ></v-icon>
             <h3 class='d-inline-block fill-height ms-2'>Stops</h3>
           </div>
-          <div class='mt-2'>
-            Lorem ipsm dolor sit amet
-          </div>
+          <direction-chips
+            v-if='directionsData.length && !directionsError'
+            :directionList='directionsData'
+            :selectDirection='$route.query.d'
+            @selectedDirection='getSelectedDirection'
+            class='pa-3 pt-0 pb-2'
+          ></direction-chips>
+          <!-- Error and Loading Cards -->
+          <loading-card
+            v-if='stopsLoading && !stopsError && !directionsError'
+            text='Loading Stops...'
+            class='pt-1'
+          ></loading-card>
+          <error-card
+            v-else-if='stopsError || directionsError'
+            :text='stopsError || directionsError'
+            class='pt-1'
+          ></error-card>
+          <!-- Stops List -->
+          <stop-list
+            v-else-if='stopsData.length'
+            :stopList='stopsData'
+            class='w-100'
+          ></stop-list>
         </v-card>
       </v-col>
     </v-row>
@@ -108,17 +129,21 @@ import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
 // Child components
+import DirectionChips from '../components/FragmentDirectionChips.vue'
+import DisruptionCard from '../components/SectionDisruptionCard.vue'
 import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
-import DisruptionCard from '../components/SectionDisruptionCard.vue'
+import StopList from '../components/FragmentStopList.vue'
 
 export default defineComponent({
   name: 'ViewRoute',
 
   components: { // Child components
+    DirectionChips,
+    DisruptionCard,
     ErrorCard,
     LoadingCard,
-    DisruptionCard
+    StopList
   },
 
   setup () {
@@ -131,6 +156,9 @@ export default defineComponent({
       routeData: [],
       routeLoading: true,
       routeError: '',
+      selectedDirection: null,
+      directionsData: [],
+      directionsError: '',
       stopsData: [],
       stopsLoading: false,
       stopsError: '',
@@ -167,6 +195,11 @@ export default defineComponent({
       this.routeRequest()
     })
 
+    // Mount debounced directions request function
+    this.debouncedDirectionsRequest = this.debounce(500, function () {
+      this.directionsRequest()
+    })
+
     // Mount debounced stops request function
     this.debouncedStopsRequest = this.debounce(500, function () {
       this.stopsRequest()
@@ -180,6 +213,7 @@ export default defineComponent({
 
   mounted: function () {
     this.debouncedRouteRequest()
+    this.debouncedDirectionsRequest()
     this.debouncedStopsRequest()
     this.debouncedDisruptionsRequest()
   },
@@ -201,13 +235,36 @@ export default defineComponent({
         })
     },
 
+    // Query API for directions data
+    directionsRequest: function () {
+      const request = `/v3/directions/route/${this.$route.params.routeId}`
+      this.$root.ptvApiRequest(request)
+        .then((data) => {
+          this.directionsData = data.directions
+          this.directionsError = ''
+        })
+        .catch((error) => {
+          this.directionsError = error.message
+        })
+    },
+
     // Query API for stops data
     stopsRequest: function () {
       this.stopsLoading = true
-      const request = `/v3/stops/route/${this.$route.params.routeId}/route_type/${this.$route.params.routeType}`
+      let request = `/v3/stops/route/${this.$route.params.routeId}/route_type/${this.$route.params.routeType}`
+      if (this.selectedDirection) {
+        request += request.includes('?') ? '&' : '?'
+        request += 'direction_id=' + this.selectedDirection.direction_id
+      }
       this.$root.ptvApiRequest(request)
         .then((data) => {
-          this.stopsData = data.stops
+          if (this.selectedDirection) {
+            this.stopsData = data.stops
+              .filter(stop => stop.stop_sequence !== 0)
+              .toSorted((a, b) => a.stop_sequence - b.stop_sequence)
+          } else {
+            this.stopsData = data.stops
+          }
           this.stopsLoading = false
           this.stopsError = ''
         })
@@ -239,6 +296,23 @@ export default defineComponent({
           this.disruptionLoading = false
           this.disruptionError = error.message
         })
+    },
+
+    // Get selected route callback for child component $emit event
+    getSelectedDirection: function (value) {
+      this.selectedDirection = value
+      const urlPath = this.$route.path
+      const urlQuery = {}
+      if (this.selectedDirection) {
+        urlQuery.d = this.selectedDirection.direction_id
+      }
+      if (this.$route.name === 'route') { // prevents bouncing if path changes
+        this.$router.push({ // Push new search query to URL
+          path: urlPath,
+          query: urlQuery
+        })
+      }
+      this.debouncedStopsRequest()
     },
 
     // Debounce function for inputs
