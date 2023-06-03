@@ -2,13 +2,12 @@
   <div>
     <div
       v-if='selectable && chipList.length > 1'
-      class='font-italic mt-2'
+      class='font-italic'
     >
       Select route to filter disruptions and departures
     </div>
     <v-chip-group
       v-model='selectedRouteIndex'
-      :class='!selectable || chipList.length <= 1 ? "mt-2" : ""'
     >
       <v-chip
         v-for='route in trimmedChipList'

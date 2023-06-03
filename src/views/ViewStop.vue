@@ -97,7 +97,7 @@
             @expand='routesExpanded = true'
             :select-route='$route.query.r ? $route.query.r : null'
             @selected-route='getSelectedRoute'
-            class='mt-1 w-100'
+            class='mt-2 w-100'
           ></route-chips>
         </v-card>
       </v-col>
