@@ -8,7 +8,8 @@
       <v-icon
         @click='favouriteButton()'
         :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
-        class='text-favourite-yellow float-right'
+        :class='favouriteStop ? "text-favourite-yellow" : "text-over-color"'
+        class='float-right'
       ></v-icon><br>
       <v-icon
         v-if='disruption'

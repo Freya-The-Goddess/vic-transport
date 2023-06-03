@@ -31,8 +31,9 @@
               v-bind='props'
               @click='favouriteButton()'
               :icon='favouriteStop ? "mdi-star" : "mdi-star-outline"'
+              :class='favouriteStop ? "text-favourite-yellow" : "text-over-color"'
               size='xx-large'
-              class='fav-button text-favourite-yellow'
+              class='fav-button'
             ></v-icon>
           </template>
         </v-tooltip>
