@@ -1,7 +1,7 @@
 <template>
   <div class='w-100 d-flex align-center'>
     <div class='pe-2'>Direction:</div>
-    <v-chip-group v-model='selectedDirection'>
+    <v-chip-group v-model='selectedDirection' class='pt-0 pb-0'>
       <v-chip
         v-for='direction in directionList'
         :key='direction.direction_id'
