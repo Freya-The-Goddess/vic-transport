@@ -55,10 +55,6 @@ export default {
   ],
 
   methods: {
-    stopIcon: function (stop) {
-      return { icon: 'mdi-circle-slice-8', color: 'metro-blue' }
-    },
-
     // Returns true if stop is in favourites
     favouriteStop: function (stopId, routeType) {
       const favourites = this.$store.state.favouriteStops
