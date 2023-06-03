@@ -14,7 +14,7 @@
         :class='"text-" + $root.routeTypes[route.route_type].route_type_color'
         class='chip-opacity'
       >
-        <span class='text-caption text-over-color'>{{ route.short_name }}</span>
+        <span class='text-caption text-over-color'>{{ !this.expanded ? route.short_name : route.name }}</span>
       </v-chip>
       <div
         v-if='extraChips'
@@ -39,7 +39,7 @@ export default {
     'routesList',
     'routeType',
     'maxChips',
-    'truncateChips',
+    'expanded',
     'selectable',
     'expandable',
     'selectRoute'
@@ -86,14 +86,20 @@ export default {
     chipList: function () {
       return this.sortedRoutesList.map((route) => {
         if ((route.route_type === 1 || route.route_type === 2) && route.route_number !== '') {
-          return { short_name: route.route_number.toString(), route_type: route.route_type, route_id: route.route_id }
+          return { name: route.route_number.toString(), short_name: route.route_number.toString(), route_type: route.route_type, route_id: route.route_id }
         } else {
-          if (route.route_name.length <= 15 || !this.truncateChips) {
-            return { short_name: route.route_name, route_type: route.route_type, route_id: route.route_id }
+          if (route.route_name.length <= 15) {
+            return { name: route.route_name, short_name: route.route_name, route_type: route.route_type, route_id: route.route_id }
           } else {
-            return { short_name: route.route_name.substr(0, 12) + '...', route_type: route.route_type, route_id: route.route_id }
+            return { name: route.route_name, short_name: route.route_name.substr(0, 12) + '...', route_type: route.route_type, route_id: route.route_id }
           }
         }
+      }).toSorted((a, b) => {
+        if (this.selectedRoute && !this.expanded && this.sortedRoutesList.length > this.maxChips) {
+          if (a.route_id === this.selectedRoute.route_id) return -1
+          else if (b.route_id === this.selectedRoute.route_id) return 1
+          else return 0
+        } else return 0
       })
     },
 
