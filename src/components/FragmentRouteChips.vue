@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if='selectable && chipList.length > 1'>
+    <div v-if='selectable && chipList.length > 1' class='text-body-2'>
       Select route to filter disruptions and departures
     </div>
     <v-chip-group v-model='selectedRoute'>
