@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      v-if='selectable && chipList.length > 1'
-      class='font-italic'
-    >
+    <div v-if='selectable && chipList.length > 1'>
       Select route to filter disruptions and departures
     </div>
     <v-chip-group
