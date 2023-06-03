@@ -170,10 +170,9 @@ export default defineComponent({
   computed: {
     // Returns true if stop is in favourites
     favouriteStop: function () {
-      const self = this
       const favourites = this.$store.state.favouriteStops
-      return !!favourites.find(function (fav) {
-        return (fav.stopId.toString() === self.$route.params.stopId && fav.routeType.toString() === self.$route.params.routeType)
+      return !!favourites.find((fav) => {
+        return (fav.stopId.toString() === this.$route.params.stopId && fav.routeType.toString() === this.$route.params.routeType)
       })
     },
 
