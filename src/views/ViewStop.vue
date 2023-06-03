@@ -92,7 +92,7 @@
             :routes-list='stopData.routes'
             :route-type='stopData.route_type'
             :max-chips='routesExpanded ? 0 : maxChips'
-            :truncate-chips='!routesExpanded'
+            :expanded='routesExpanded'
             :selectable='!!(stopData.routes.length-1)'
             :expandable='true'
             @expand='routesExpanded = true'
@@ -112,17 +112,45 @@
     <!-- Stop Departures -->
     <v-row>
       <v-col>
-        <v-card class='pa-3'>
-          <div class='card-title d-flex align-center'>
+        <v-card>
+          <div class='card-title d-flex align-center pa-3 pb-2'>
             <v-icon
               icon='mdi-clock'
               class='d-inline-block fill-height'
             ></v-icon>
             <h3 class='d-inline-block fill-height ms-2'>Departures</h3>
           </div>
-          <div class='mt-2'>
-            Lorem ipsm dolor sit amet
-          </div>
+          <direction-chips
+            v-if='directionsData.length && !directionsError'
+            :directionList='directionsData'
+            :selectDirection='$route.query.d'
+            @selectedDirection='getSelectedDirection'
+            class='pa-3 pt-0 pb-2'
+          ></direction-chips>
+          <!-- Error and Loading Cards -->
+          <loading-card
+            v-if='departuresLoading && !departuresError && !directionsError'
+            text='Loading Stops...'
+            class='pt-2'
+          ></loading-card>
+          <error-card
+            v-else-if='departuresError || directionsError'
+            :text='departuresError || directionsError'
+            class='pt-2'
+          ></error-card>
+          <message-card
+            v-else-if='!departuresData.length'
+            text='No Departures'
+            class='pt-2'
+          ></message-card>
+          <!-- Departures List -->
+          <departure-list
+            v-else-if='departuresData.length'
+            :departureList='departuresData'
+            :directionList='departuresDirections'
+            :routeList='departuresRoutes'
+            class='w-100'
+          ></departure-list>
         </v-card>
       </v-col>
     </v-row>
@@ -134,18 +162,24 @@ import { defineComponent } from 'vue'
 import { useDisplay } from 'vuetify'
 
 // Child components
+import DepartureList from '../components/FragmentDepartureList.vue'
+import DirectionChips from '../components/FragmentDirectionChips.vue'
+import DisruptionCard from '../components/SectionDisruptionCard.vue'
 import ErrorCard from '../components/SectionErrorCard.vue'
 import LoadingCard from '../components/SectionLoadingCard.vue'
-import DisruptionCard from '../components/SectionDisruptionCard.vue'
+import MessageCard from '../components/SectionMessageCard.vue'
 import RouteChips from '../components/FragmentRouteChips.vue'
 
 export default defineComponent({
   name: 'ViewStop',
 
   components: { // Child components
+    DepartureList,
+    DirectionChips,
+    DisruptionCard,
     ErrorCard,
     LoadingCard,
-    DisruptionCard,
+    MessageCard,
     RouteChips
   },
 
@@ -161,6 +195,15 @@ export default defineComponent({
       stopError: '',
       routesExpanded: false,
       selectedRoute: null,
+      selectedDirection: null,
+      directionsData: [],
+      directionsError: '',
+      departuresData: [],
+      departuresDirections: {},
+      departuresRoutes: {},
+      departuresLoading: false,
+      departuresError: '',
+      maxDepartures: 10,
       disruptionData: [],
       disruptionLoading: false,
       disruptionError: ''
@@ -200,6 +243,16 @@ export default defineComponent({
       this.stopRequest()
     })
 
+    // Mount debounced directions request function
+    this.debouncedDirectionsRequest = this.debounce(500, function () {
+      this.directionsRequest()
+    })
+
+    // Mount debounced departures request function
+    this.debouncedDeparturesRequest = this.debounce(500, function () {
+      this.departuresRequest()
+    })
+
     // Mount debounced disruptions request function
     this.debouncedDisruptionsRequest = this.debounce(500, function () {
       this.disruptionsRequest()
@@ -208,6 +261,8 @@ export default defineComponent({
 
   mounted: function () {
     this.debouncedStopRequest()
+    this.debouncedDirectionsRequest()
+    this.debouncedDeparturesRequest()
     this.debouncedDisruptionsRequest()
   },
 
@@ -222,12 +277,63 @@ export default defineComponent({
           if (this.stopData.routes.length < this.maxChips) {
             this.routesExpanded = true
           }
+          if (this.stopData.routes.length === 1) {
+            this.getSelectedRoute(this.stopData.routes[0])
+          }
           this.stopLoading = false
           this.stopError = ''
         })
         .catch((error) => {
           this.stopLoading = false
           this.stopError = error.message
+        })
+    },
+
+    // Query API for directions data
+    directionsRequest: function () {
+      this.directionsData = []
+      if (this.selectedRoute) {
+        const request = `/v3/directions/route/${this.selectedRoute.route_id}`
+        this.$root.ptvApiRequest(request)
+          .then((data) => {
+            this.directionsData = data.directions.toSorted((a, b) => a.direction_id - b.direction_id)
+            this.directionsError = ''
+          })
+          .catch((error) => {
+            this.directionsError = error.message
+          })
+      }
+    },
+
+    // Query API for departures data at stop
+    departuresRequest: function () {
+      this.departuresLoading = true
+      let request = ''
+      if (this.selectedRoute) {
+        request = `/v3/departures/route_type/${this.selectedRoute.route_type}/stop/${this.$route.params.stopId}/route/${this.selectedRoute.route_id}`
+        if (this.selectedDirection) {
+          request += request.includes('?') ? '&' : '?'
+          request += 'direction_id=' + this.selectedDirection.direction_id
+        }
+      } else {
+        request = `/v3/departures/route_type/${this.$route.params.routeType}/stop/${this.$route.params.stopId}`
+      }
+      if (this.maxDepartures) {
+        request += request.includes('?') ? '&' : '?'
+        request += 'max_results=' + this.maxDepartures
+      }
+      request += (request.includes('?') ? '&' : '?') + 'expand=Direction&expand=Route'
+      this.$root.ptvApiRequest(request)
+        .then((data) => {
+          this.departuresData = data.departures
+          this.departuresDirections = data.directions
+          this.departuresRoutes = data.routes
+          this.departuresLoading = false
+          this.departuresError = ''
+        })
+        .catch((error) => {
+          this.departuresLoading = false
+          this.departuresError = error.message
         })
     },
 
@@ -267,6 +373,9 @@ export default defineComponent({
       const urlQuery = {}
       if (this.selectedRoute) {
         urlQuery.r = this.selectedRoute.route_id
+        if (this.$route.query.d && this.selectedRoute.route_id === parseInt(this.$route.query.r)) {
+          urlQuery.d = parseInt(this.$route.query.d)
+        }
       }
       if (this.$route.name === 'stop') { // prevents bouncing if path changes
         this.$router.push({ // Push new search query to URL
@@ -275,6 +384,28 @@ export default defineComponent({
         })
       }
       this.debouncedDisruptionsRequest()
+      this.debouncedDirectionsRequest()
+      this.debouncedDeparturesRequest()
+    },
+
+    // Get selected route callback for child component $emit event
+    getSelectedDirection: function (value) {
+      this.selectedDirection = value
+      const urlPath = this.$route.path
+      const urlQuery = {}
+      if (this.$route.query.r) {
+        urlQuery.r = parseInt(this.$route.query.r)
+      }
+      if (this.selectedDirection) {
+        urlQuery.d = this.selectedDirection.direction_id
+      }
+      if (this.$route.name === 'stop') { // prevents bouncing if path changes
+        this.$router.push({ // Push new search query to URL
+          path: urlPath,
+          query: urlQuery
+        })
+      }
+      this.debouncedDeparturesRequest()
     },
 
     favouriteButton: function () {
