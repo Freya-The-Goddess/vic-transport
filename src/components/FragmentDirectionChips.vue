@@ -7,11 +7,10 @@
         :key='direction.direction_id'
         :value='direction'
         filter
-        mandatory
         variant='outlined'
         class='chip-opacity'
       >
-        <span class='text-caption text-over-color'>{{ direction.direction_name }}</span>
+        <span class='text-caption text-over-color'>to {{ direction.direction_name }}</span>
       </v-chip>
     </v-chip-group>
   </div>
@@ -38,10 +37,11 @@ export default {
 
   watch: {
     selectedDirection: function () {
-      if (this.selectedDirection === undefined) {
-        this.selectedDirection = this.directionList[0]
+      if (this.selectedDirection) {
+        this.$emit('selectedDirection', this.selectedDirection)
+      } else {
+        this.$emit('selectedDirection', null)
       }
-      this.$emit('selectedDirection', this.selectedDirection)
     }
   },
 
@@ -49,10 +49,10 @@ export default {
     // Populate selection from props
     if (this.selectDirection) {
       this.selectedDirection = this.directionList.find(direction => direction.direction_id === parseInt(this.selectDirection))
+      this.$emit('selectedDirection', this.selectedDirection)
     } else {
-      this.selectedDirection = this.directionList[0]
+      this.$emit('selectedDirection', null)
     }
-    this.$emit('selectedDirection', this.selectedDirection)
   }
 }
 </script>
