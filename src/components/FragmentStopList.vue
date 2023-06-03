@@ -7,7 +7,7 @@
       <v-divider></v-divider>
       <v-list-item
         lines='5'
-        class='ps-4 pe-4'
+        class='ps-3 pe-4'
       >
         <template v-slot:prepend>
           <router-link
@@ -15,14 +15,14 @@
             class='text-decoration-none text-over-color'
           >
             <v-card
-              color='over-color'
+              :color='$root.routeTypes[stop.route_type].route_type_color'
               rounded='circle'
-              class='stop-icon me-3 mt-1 mb-1'
+              class='stop-icon d-flex align-center justify-center me-3'
             >
               <v-icon
-                icon='mdi-circle'
-                :class='"text-"+$root.routeTypes[stop.route_type].route_type_color'
-                size='x-large'
+                :icon='$root.routeTypes[stop.route_type].route_type_icon'
+                class='text-over-color'
+                size='large'
               ></v-icon>
             </v-card>
           </router-link>
@@ -77,6 +77,8 @@ export default {
 <style scoped>
 .stop-icon {
   opacity: 1 !important;
+  width: 35px;
+  height: 35px;
 }
 
 .fav-button {
