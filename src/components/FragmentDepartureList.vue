@@ -50,13 +50,12 @@ export default {
       if (departure.estimated_departure_utc) {
         const departureTime = Date.parse(departure.estimated_departure_utc)
         const timeTill = Math.ceil((departureTime - Date.now()) / 60000)
-        if (timeTill <= 60) return timeTill.toString() + ' min'
+        if (timeTill === 0) return 'Now'
+        else if (timeTill <= 60) return timeTill.toString() + ' min'
         else return new Date(departureTime).toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' })
       } else if (departure.scheduled_departure_utc) {
         const departureTime = Date.parse(departure.scheduled_departure_utc)
-        const timeTill = Math.ceil((departureTime - Date.now()) / 60000)
-        if (timeTill <= 60) return timeTill.toString() + ' min'
-        else return new Date(departureTime).toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' })
+        return new Date(departureTime).toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' })
       } else {
         return '?'
       }
