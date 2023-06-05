@@ -113,7 +113,17 @@
     <v-row>
       <v-col>
         <v-card>
-          <div class='card-title d-flex align-center pa-3 pb-2'>
+          <div
+            @click='reloadButton()'
+            role='button'
+            class='card-expand-button float-right pa-3 pt-4 pb-1'
+          >
+            <v-icon
+              icon='mdi-sync'
+              class='float-right'
+            ></v-icon>
+          </div>
+          <div class='card-expand-title d-flex align-center pa-3 pb-2'>
             <v-icon
               icon='mdi-clock'
               class='d-inline-block fill-height'
@@ -414,6 +424,11 @@ export default defineComponent({
       } else {
         this.$store.commit('removeFavouriteStop', { stopId: this.stopData.stop_id, routeType: this.stopData.route_type })
       }
+    },
+
+    reloadButton: function () {
+      this.debouncedDeparturesRequest()
+      this.debouncedDisruptionsRequest()
     },
 
     // Debounce function for inputs
