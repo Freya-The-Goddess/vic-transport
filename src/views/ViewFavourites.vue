@@ -41,7 +41,7 @@
         ></error-card>
         <message-card
           v-else-if='!favLoading && !favStops.length'
-          text='No Favourite Stops'
+          text='No favourite stops yet, use the star buttons to add stops to favourites.'
         ></message-card>
       </v-col>
     </v-row>
