@@ -77,8 +77,8 @@ export default {
 <style scoped>
 .stop-icon {
   opacity: 1 !important;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
 }
 
 .fav-button {
